@@ -1,0 +1,17 @@
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/bin/Debug/net8.0/Presentation.deps.json
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/bin/Debug/net8.0/Presentation.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/bin/Debug/net8.0/Presentation.pdb
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/bin/Debug/net8.0/serviceAbstraction.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/bin/Debug/net8.0/Shared.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/bin/Debug/net8.0/serviceAbstraction.pdb
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/bin/Debug/net8.0/Shared.pdb
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/obj/Debug/net8.0/Presentation.csproj.AssemblyReference.cache
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/obj/Debug/net8.0/Presentation.GeneratedMSBuildEditorConfig.editorconfig
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/obj/Debug/net8.0/Presentation.AssemblyInfoInputs.cache
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/obj/Debug/net8.0/Presentation.AssemblyInfo.cs
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/obj/Debug/net8.0/Presentation.csproj.CoreCompileInputs.cache
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/obj/Debug/net8.0/Presenta.BC777DBE.Up2Date
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/obj/Debug/net8.0/Presentation.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/obj/Debug/net8.0/refint/Presentation.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/obj/Debug/net8.0/Presentation.pdb
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Presentation/obj/Debug/net8.0/ref/Presentation.dll

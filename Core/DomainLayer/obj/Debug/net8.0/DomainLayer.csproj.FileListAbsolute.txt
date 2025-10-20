@@ -1,0 +1,11 @@
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/bin/Debug/net8.0/DomainLayer.deps.json
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/bin/Debug/net8.0/DomainLayer.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/bin/Debug/net8.0/DomainLayer.pdb
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/DomainLayer.GeneratedMSBuildEditorConfig.editorconfig
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/DomainLayer.AssemblyInfoInputs.cache
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/DomainLayer.AssemblyInfo.cs
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/DomainLayer.csproj.CoreCompileInputs.cache
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/DomainLayer.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/refint/DomainLayer.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/DomainLayer.pdb
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/ref/DomainLayer.dll
