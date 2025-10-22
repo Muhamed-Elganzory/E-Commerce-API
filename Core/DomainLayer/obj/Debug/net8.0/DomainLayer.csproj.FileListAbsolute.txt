@@ -9,3 +9,4 @@
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/refint/DomainLayer.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/DomainLayer.pdb
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/ref/DomainLayer.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/obj/Debug/net8.0/DomainLayer.sourcelink.json

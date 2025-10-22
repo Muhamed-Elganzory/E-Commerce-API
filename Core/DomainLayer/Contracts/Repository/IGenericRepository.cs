@@ -1,3 +1,4 @@
+using DomainLayer.Contracts.Spec;
 using DomainLayer.Models.Shared;
 
 namespace DomainLayer.Contracts.Repository;
@@ -19,7 +20,7 @@ namespace DomainLayer.Contracts.Repository;
 /// </remarks>
 /// <typeparam name="TEntity">Like: Product</typeparam>
 /// <typeparam name="TKey">Like: int</typeparam>
-public interface IGenericRepository <TEntity, in TKey> where TEntity : BaseEntity<TKey>
+public interface IGenericRepository <TEntity, TKey> where TEntity : BaseEntity<TKey>
 {
     // Get all entities
     /// <summary>
@@ -58,4 +59,30 @@ public interface IGenericRepository <TEntity, in TKey> where TEntity : BaseEntit
     /// </summary>
     /// <param name="entity">Like Product</param>
     public void Delete (TEntity entity);
+
+    // Get all entities but, with criteria by Specification that to handle
+    /// <summary>
+    ///     Retrieves all entities that satisfy the given specification criteria.
+    /// </summary>
+    /// <param name="specification">
+    ///     The specification that defines the filtering, sorting, and including rules for the query.
+    /// </param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation.
+    ///     The task result contains an enumerable collection of entities that match the specification.
+    /// </returns>
+    public Task<List<TEntity>> GetAllAsync(ISpecification<TEntity, TKey> specification);
+
+    // Get entity by id but, with criteria by Specification that to handle
+    /// <summary>
+    ///     Retrieves a single entity that matches the given specification criteria.
+    /// </summary>
+    /// <param name="specification">
+    ///     The specification that defines the filtering, sorting, and including rules for the entity query.
+    /// </param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation.
+    ///     The task result contains the entity that matches the specification, or <c>null</c> if no match is found.
+    /// </returns>
+    public Task<TEntity?> GetByIdAsync(ISpecification<TEntity, TKey> specification);
 }

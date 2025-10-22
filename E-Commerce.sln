@@ -3,15 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E-Commerce", "E-Commerce\E-Commerce.csproj", "{55CECBAD-CC35-4DB5-8AB3-4D6D4F943326}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{50335F56-D7D9-4441-8B0E-149C3C8F5268}"
-	ProjectSection(SolutionItems) = preProject
-		Core\README.m = Core\README.m
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Core\Service\Service.csproj", "{10D41954-F4E5-4FE7-9178-9FC15C0D2EE0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainLayer", "Core\DomainLayer\DomainLayer.csproj", "{F396C647-45ED-4FF4-965C-65A51D965EA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "serviceAbstraction", "Core\serviceAbstraction\serviceAbstraction.csproj", "{828C5816-1E95-4D6F-BEDF-025CC30671C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceAbstraction", "Core\ServiceAbstraction\ServiceAbstraction.csproj", "{828C5816-1E95-4D6F-BEDF-025CC30671C4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{9EC44F86-D503-4642-B033-CFF7B2DD42C5}"
 EndProject

@@ -19,3 +19,4 @@
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Persistence/obj/Debug/net8.0/refint/Persistence.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Persistence/obj/Debug/net8.0/Persistence.pdb
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Persistence/obj/Debug/net8.0/ref/Persistence.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Persistence/obj/Debug/net8.0/Persistence.sourcelink.json

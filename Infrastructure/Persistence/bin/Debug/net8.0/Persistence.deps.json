@@ -584,8 +584,10 @@
         "dependencies": {
           "AutoMapper": "15.0.1",
           "DomainLayer": "1.0.0",
+          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.20",
           "Microsoft.Extensions.Configuration": "8.0.0",
-          "serviceAbstraction": "1.0.0"
+          "Service Abstraction": "1.0.0",
+          "ServiceAbstraction": "1.0.0"
         },
         "runtime": {
           "Service.dll": {
@@ -594,12 +596,12 @@
           }
         }
       },
-      "serviceAbstraction/1.0.0": {
+      "ServiceAbstraction/1.0.0": {
         "dependencies": {
           "Shared": "1.0.0"
         },
         "runtime": {
-          "serviceAbstraction.dll": {
+          "ServiceAbstraction.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -995,7 +997,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "serviceAbstraction/1.0.0": {
+    "ServiceAbstraction/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -2,17 +2,30 @@
   "version": 3,
   "targets": {
     "net8.0": {
-      "serviceAbstraction/1.0.0": {
+      "Service Abstraction/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "Shared": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/serviceAbstraction.dll": {}
+          "bin/placeholder/Service Abstraction.dll": {}
         },
         "runtime": {
-          "bin/placeholder/serviceAbstraction.dll": {}
+          "bin/placeholder/Service Abstraction.dll": {}
+        }
+      },
+      "ServiceAbstraction/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Shared": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ServiceAbstraction.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ServiceAbstraction.dll": {}
         }
       },
       "Shared/1.0.0": {
@@ -28,10 +41,15 @@
     }
   },
   "libraries": {
-    "serviceAbstraction/1.0.0": {
+    "Service Abstraction/1.0.0": {
       "type": "project",
-      "path": "../../Core/serviceAbstraction/serviceAbstraction.csproj",
-      "msbuildProject": "../../Core/serviceAbstraction/serviceAbstraction.csproj"
+      "path": "../../Core/Service Abstraction/Service Abstraction.csproj",
+      "msbuildProject": "../../Core/Service Abstraction/Service Abstraction.csproj"
+    },
+    "ServiceAbstraction/1.0.0": {
+      "type": "project",
+      "path": "../../Core/ServiceAbstraction/ServiceAbstraction.csproj",
+      "msbuildProject": "../../Core/ServiceAbstraction/ServiceAbstraction.csproj"
     },
     "Shared/1.0.0": {
       "type": "project",
@@ -41,7 +59,8 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "serviceAbstraction >= 1.0.0"
+      "Service Abstraction >= 1.0.0",
+      "ServiceAbstraction >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -69,8 +88,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/serviceAbstraction/serviceAbstraction.csproj": {
-              "projectPath": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/serviceAbstraction/serviceAbstraction.csproj"
+            "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/Service Abstraction/Service Abstraction.csproj": {
+              "projectPath": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/Service Abstraction/Service Abstraction.csproj"
+            },
+            "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/ServiceAbstraction.csproj": {
+              "projectPath": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/ServiceAbstraction.csproj"
             }
           }
         }

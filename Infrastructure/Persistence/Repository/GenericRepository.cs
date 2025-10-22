@@ -2,6 +2,8 @@ using Persistence.DB;
 using DomainLayer.Models.Shared;
 using Microsoft.EntityFrameworkCore;
 using DomainLayer.Contracts.Repository;
+using DomainLayer.Contracts.Spec;
+using Service.Spec.Helper;
 
 namespace Persistence.Repository;
 
@@ -72,5 +74,40 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext): IGeneri
         // Set<TEntity>(): This method is used to get a DbSet<TEntity> instance for the specified entity type TEntity.
         // Remove(entity): This method is used to remove the specified entity from the DbSet.
         _dbContext.Set<TEntity>().Remove(entity);
+    }
+
+    /// <summary>
+    ///     Retrieves all entities that satisfy the given specification criteria.
+    /// </summary>
+    /// <param name="specification">
+    ///     The specification object that defines filtering, including, sorting, or paging rules to apply.
+    /// </param>
+    /// <returns>
+    ///     A task representing the asynchronous operation.
+    ///     The task result contains a list of entities that match the provided specification.
+    /// </returns>
+    public async Task<List<TEntity>> GetAllAsync(ISpecification<TEntity, TKey> specification)
+    {
+        // Retrieves all entities that match the specification criteria,
+        // including any related entities defined via Include expressions.
+        return await SpecificationEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specification).ToListAsync();
+    }
+
+    /// <summary>
+    ///     Retrieves a single entity that matches the given specification criteria.
+    /// </summary>
+    /// <param name="specification">
+    ///     The specification object that defines the filtering and include rules for querying a specific entity.
+    /// </param>
+    /// <returns>
+    ///     A task representing the asynchronous operation.
+    ///     The task result contains the entity that matches the specification, or <c>null</c> if no entity is found.
+    /// </returns>
+    public async Task<TEntity?> GetByIdAsync(ISpecification<TEntity, TKey> specification)
+    {
+        // Retrieves a single entity matching the specification criteria,
+        // Including any related entities defined in Include expressions.
+        // Returns null if no matching entity is found.
+        return await SpecificationEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specification).FirstOrDefaultAsync();
     }
 }

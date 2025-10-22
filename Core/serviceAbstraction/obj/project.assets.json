@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/serviceAbstraction/serviceAbstraction.csproj",
-      "projectName": "serviceAbstraction",
-      "projectPath": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/serviceAbstraction/serviceAbstraction.csproj",
+      "projectUniqueName": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/ServiceAbstraction.csproj",
+      "projectName": "ServiceAbstraction",
+      "projectPath": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/ServiceAbstraction.csproj",
       "packagesPath": "/Users/macbook/.nuget/packages/",
-      "outputPath": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/serviceAbstraction/obj/",
+      "outputPath": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/macbook/.nuget/NuGet/NuGet.Config"

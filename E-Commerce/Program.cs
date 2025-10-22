@@ -69,7 +69,6 @@ public abstract class Program
         // Register PictureUrlResolver as a Singleton service in the Dependency Injection (DI) container.
         builder.Services.AddSingleton<PictureUrlResolver>();
 
-
         #endregion
 
         #region Build App

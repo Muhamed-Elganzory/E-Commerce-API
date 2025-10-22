@@ -8,18 +8,18 @@
     ".NETCoreApp,Version=v8.0": {
       "Presentation/1.0.0": {
         "dependencies": {
-          "serviceAbstraction": "1.0.0"
+          "ServiceAbstraction": "1.0.0"
         },
         "runtime": {
           "Presentation.dll": {}
         }
       },
-      "serviceAbstraction/1.0.0": {
+      "ServiceAbstraction/1.0.0": {
         "dependencies": {
           "Shared": "1.0.0"
         },
         "runtime": {
-          "serviceAbstraction.dll": {
+          "ServiceAbstraction.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -41,7 +41,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "serviceAbstraction/1.0.0": {
+    "ServiceAbstraction/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

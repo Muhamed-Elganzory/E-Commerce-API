@@ -17,3 +17,4 @@
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/Service/obj/Debug/net8.0/refint/Service.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/Service/obj/Debug/net8.0/Service.pdb
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/Service/obj/Debug/net8.0/ref/Service.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/Service/obj/Debug/net8.0/Service.sourcelink.json
