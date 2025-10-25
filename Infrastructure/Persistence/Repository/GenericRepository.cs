@@ -77,35 +77,35 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext): IGeneri
     }
 
     /// <summary>
-    ///     Retrieves all entities that satisfy the given specification criteria.
+    ///     Retrieves all entities that satisfy the given baseSpecification criteria.
     /// </summary>
     /// <param name="specification">
-    ///     The specification object that defines filtering, including, sorting, or paging rules to apply.
+    ///     The baseSpecification object that defines filtering, including, sorting, or paging rules to apply.
     /// </param>
     /// <returns>
     ///     A task representing the asynchronous operation.
-    ///     The task result contains a list of entities that match the provided specification.
+    ///     The task result contains a list of entities that match the provided baseSpecification.
     /// </returns>
-    public async Task<List<TEntity>> GetAllAsync(ISpecification<TEntity, TKey> specification)
+    public async Task<List<TEntity>> GetAllAsync(IBaseSpecification<TEntity, TKey> specification)
     {
-        // Retrieves all entities that match the specification criteria,
+        // Retrieves all entities that match the baseSpecification criteria,
         // including any related entities defined via Include expressions.
         return await SpecificationEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specification).ToListAsync();
     }
 
     /// <summary>
-    ///     Retrieves a single entity that matches the given specification criteria.
+    ///     Retrieves a single entity that matches the given baseSpecification criteria.
     /// </summary>
     /// <param name="specification">
-    ///     The specification object that defines the filtering and include rules for querying a specific entity.
+    ///     The baseSpecification object that defines the filtering and include rules for querying a specific entity.
     /// </param>
     /// <returns>
     ///     A task representing the asynchronous operation.
-    ///     The task result contains the entity that matches the specification, or <c>null</c> if no entity is found.
+    ///     The task result contains the entity that matches the baseSpecification, or <c>null</c> if no entity is found.
     /// </returns>
-    public async Task<TEntity?> GetByIdAsync(ISpecification<TEntity, TKey> specification)
+    public async Task<TEntity?> GetByIdAsync(IBaseSpecification<TEntity, TKey> specification)
     {
-        // Retrieves a single entity matching the specification criteria,
+        // Retrieves a single entity matching the baseSpecification criteria,
         // Including any related entities defined in Include expressions.
         // Returns null if no matching entity is found.
         return await SpecificationEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specification).FirstOrDefaultAsync();

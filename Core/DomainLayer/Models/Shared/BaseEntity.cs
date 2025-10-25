@@ -6,5 +6,5 @@ namespace DomainLayer.Models.Shared;
 /// <typeparam name="TKey">Generic Type</typeparam>
 public class BaseEntity <TKey>
 {
-    public TKey Id { get; set; }
+    public TKey Id { get; set; } = default!;
 }

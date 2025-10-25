@@ -4,6 +4,8 @@ using serviceAbstraction.Contracts.Product;
 using DomainLayer.Models.Product;
 using Service.Spec.Product;
 using Shared.DTO.Product;
+using Shared.Enums.Product;
+using Shared.Queries;
 
 namespace Service.Product;
 
@@ -30,14 +32,53 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
 
     /// <summary>
     ///     Asynchronously retrieves all <see cref="Product"/> entities from the repository
-    ///     using a specification that includes related <c>ProductBrand</c> and <c>ProductType</c> data,
-    ///     then maps the results to <see cref="ProductDto"/> objects using AutoMapper.
+    ///     using a specification that encapsulates **filtering**, **sorting**, and **eager loading**
+    ///     of related <c>ProductBrand</c> and <c>ProductType</c> entities.
+    ///     The retrieved entities are then mapped to <see cref="ProductDto"/> objects using AutoMapper,
+    ///     ensuring a clear separation between domain models and API response models.
     /// </summary>
+    /// <param name="queryParams">
+    ///     An instance of <see cref="ProductQueryParams"/> containing:
+    ///     <list type="bullet">
+    ///         <item><description><c>BrandId</c> — Optional brand filter.</description></item>
+    ///         <item><description><c>TypeId</c> — Optional type filter.</description></item>
+    ///         <item><description><c>SortingOptions</c> — Determines the sorting order (e.g., by name or price).</description></item>
+    ///     </list>
+    ///     These parameters are passed from the API query string and used to construct
+    ///     a <see cref="ProductWithBrandAndTypeBaseSpecifications"/> object.
+    /// </param>
     /// <returns>
-    ///     A task that represents the asynchronous operation.
-    ///     The task result contains a collection of <see cref="ProductDto"/> objects representing the products.
+    ///     A task representing the asynchronous operation.
+    ///     The result is a collection of <see cref="ProductDto"/> objects representing products
+    ///     that match the applied filtering and sorting criteria.
     /// </returns>
-    public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
+    /// <remarks>
+    ///     🧠 This method demonstrates the **Specification Pattern** in action —
+    ///     query logic (filtering, sorting, and includes) is centralized inside a reusable specification class
+    ///     (<see cref="ProductWithBrandAndTypeBaseSpecifications"/>),
+    ///     keeping this service method clean and focused solely on orchestration. <br/><br/>
+    ///
+    ///     The **Unit of Work** pattern is used to create repositories asynchronously,
+    ///     ensuring transactional consistency across multiple data operations. <br/><br/>
+    ///
+    ///     Finally, AutoMapper transforms domain entities
+    ///     (<see cref="DomainLayer.Models.Product.Product"/>) into lightweight DTOs
+    ///     (<see cref="ProductDto"/>) for API consumption.
+    /// </remarks>
+    /// <example>
+    ///     Example usage:
+    ///     <code>
+    ///         var queryParams = new ProductQueryParams
+    ///         {
+    ///             BrandId = 3,
+    ///             TypeId = null,
+    ///             SortingOptions = ProductSortingOptions.PriceDescending
+    ///         };
+    ///
+    ///         var products = await _serviceManager.ProductService.GetAllProductsAsync(queryParams);
+    ///     </code>
+    /// </example>
+    public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(ProductQueryParams queryParams)
     {
         // (Option 1) Create repository separately, then call GetAllAsync():
         // var repo = await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Product.Product, int>();
@@ -47,10 +88,10 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
         // var repo = await (await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Product.Product, int>()).GetAllAsync();
 
         // (Option 3 - Recommended) Using Specification Pattern:
-        // 1️⃣ Create a specification that defines relationships to include (ProductBrand, ProductType)
-        var specification = new ProductWithBrandAndTypeSpecifications();
+        // 1️⃣ Create a baseSpecification that defines relationships to include (ProductBrand, ProductType)
+        var specification = new ProductWithBrandAndTypeBaseSpecifications(queryParams);
 
-        // 2️⃣ Use the specification to retrieve all products including their related data
+        // 2️⃣ Use the baseSpecification to retrieve all products including their related data
         var products = await (await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Product.Product, int>()).GetAllAsync(specification);
 
         // 3️⃣ Map the products to ProductDto objects using AutoMapper
@@ -92,12 +133,12 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
         // ─────────────────────────────────────────────
         // ✅ (Recommended Approach - Using Specification Pattern)
         // ---------------------------------------------
-        // 2️⃣ Create a specification that filters the product by id
+        // 2️⃣ Create a baseSpecification that filters the product by id
         //     and includes its related entities (ProductBrand, ProductType).
         //     This ensures all related data is loaded in a single optimized query.
-        var specification = new ProductWithBrandAndTypeSpecifications(id);
+        var specification = new ProductWithBrandAndTypeBaseSpecifications(id);
 
-        // 3️⃣ Use the specification to retrieve the product that matches the criteria.
+        // 3️⃣ Use the baseSpecification to retrieve the product that matches the criteria.
         var product = await repo.GetByIdAsync(specification);
         // ─────────────────────────────────────────────
 

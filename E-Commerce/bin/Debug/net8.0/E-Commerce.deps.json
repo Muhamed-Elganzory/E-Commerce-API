@@ -966,6 +966,7 @@
       },
       "Presentation/1.0.0": {
         "dependencies": {
+          "Service": "1.0.0",
           "Service Abstraction": "1.0.0",
           "ServiceAbstraction": "1.0.0"
         },

@@ -10,8 +10,8 @@ This keeps the **repository clean**, improves **code reusability**, and makes **
 
 ## ⚙️ How It Works (Step-by-Step)
 
-### 1️⃣ Define the Specification Interface
-The `ISpecification<TEntity, TKey>` interface defines the **structure** for a specification:
+### 1️⃣ Define the Base Specification Interface
+The `IBaseSpecification<TEntity, TKey>` interface defines the **structure** for a specification:
 - A `Criteria` expression (filter condition)
 - A collection of `Include` expressions (for eager loading related entities)
 

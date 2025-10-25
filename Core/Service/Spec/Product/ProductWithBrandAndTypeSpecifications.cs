@@ -1,32 +1,115 @@
 using Service.Spec.Base;
+using Shared.Enums.Product;
+using Shared.Queries;
 
 namespace Service.Spec.Product;
 
 /// <summary>
-///     A specification that includes related <c>ProductBrand</c> and <c>ProductType</c>
+///     A baseSpecification that includes related <c>ProductBrand</c> and <c>ProductType</c>
 ///     navigation properties when querying <c>Product</c> entities.
 /// </summary>
-public class ProductWithBrandAndTypeSpecifications : BaseSpecification<DomainLayer.Models.Product.Product, int>
+public class ProductWithBrandAndTypeBaseSpecifications : BaseSpecification<DomainLayer.Models.Product.Product, int>
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ProductWithBrandAndTypeSpecifications"/> class.
-    ///     Retrieves all products along with their associated <c>ProductBrand</c> and <c>ProductType</c>.
+    ///     Initializes a new instance of the <see cref="ProductWithBrandAndTypeBaseSpecifications"/> class,
+    ///     applying dynamic **filtering**, **searching**, and **sorting** rules based on the provided <see cref="ProductQueryParams"/>.
+    ///     This specification also eagerly loads related <c>ProductBrand</c> and <c>ProductType</c> entities
+    ///     to ensure optimized query performance and prevent lazy-loading.
     /// </summary>
-    public ProductWithBrandAndTypeSpecifications()
-        : base(null)
+    /// <param name="queryParams">
+    ///     An object containing query parameters used to filter, search, and sort products:
+    ///     <list type="bullet">
+    ///         <item><description><c>BrandId</c> — Optional. Filters products by brand if provided.</description></item>
+    ///         <item><description><c>TypeId</c> — Optional. Filters products by type if provided.</description></item>
+    ///         <item><description><c>SearchValue</c> — Optional. Performs a case-insensitive search by product name or description.</description></item>
+    ///         <item><description><c>SortingOptions</c> — Determines how products are sorted (e.g., by name or price, ascending or descending).</description></item>
+    ///     </list>
+    /// </param>
+    /// <remarks>
+    ///     🧠 This constructor demonstrates **constructor chaining** by calling the base class
+    ///     (<see cref="BaseSpecification{TEntity, TKey}"/>) with a composite predicate expression that:
+    ///     <list type="number">
+    ///         <item>Applies brand and type filters only if their values are provided.</item>
+    ///         <item>Performs a case-insensitive text search when <c>SearchValue</c> is not null or empty.</item>
+    ///     </list>
+    ///     <br/>
+    ///
+    ///     Example predicate expression:
+    ///     <code>
+    ///     p => (!queryParams.BrandId.HasValue || p.ProductBrandId == queryParams.BrandId)
+    ///          && (!queryParams.TypeId.HasValue || p.ProductTypeId == queryParams.TypeId)
+    ///          && (string.IsNullOrWhiteSpace(queryParams.SearchValue)
+    ///              || p.Name.ToLower().Contains(queryParams.SearchValue.ToLower()))
+    ///     </code>
+    ///     <br/>
+    ///
+    ///     The <see cref="BaseSpecification{TEntity, TKey}.AddInclude"/> method is used
+    ///     to include <c>ProductBrand</c> and <c>ProductType</c> for eager loading. <br/><br/>
+    ///
+    ///     Finally, a <c>switch</c> statement applies sorting logic
+    ///     based on <c>queryParams.SortingOptions</c>, keeping all query-related logic
+    ///     encapsulated within the specification for cleaner and more testable service methods.
+    /// </remarks>
+    /// <example>
+    ///     Example usage:
+    ///     <code>
+    ///         var queryParams = new ProductQueryParams
+    ///         {
+    ///             BrandId = 2,
+    ///             TypeId = null,
+    ///             SearchValue = "laptop",
+    ///             SortingOptions = ProductSortingOptions.PriceDescending
+    ///         };
+    ///
+    ///         var spec = new ProductWithBrandAndTypeBaseSpecifications(queryParams);
+    ///     </code>
+    /// </example>
+    public ProductWithBrandAndTypeBaseSpecifications(ProductQueryParams queryParams)
+        : base(p =>
+            (!queryParams.BrandId.HasValue || p.ProductBrandId == queryParams.BrandId) &&
+            (!queryParams.TypeId.HasValue || p.ProductTypeId == queryParams.TypeId) &&
+            (string.IsNullOrWhiteSpace(queryParams.SearchValue) || p.Name.Contains(queryParams.SearchValue.ToLower())))
     {
         AddInclude(p => p.ProductBrand);
         AddInclude(p => p.ProductType);
+
+        switch (queryParams.SortingOptions)
+        {
+            case ProductSortingOptions.NameAscending:
+                AddOrderByAscending(p => p.Name);
+                break;
+
+            case ProductSortingOptions.NameDescending:
+                AddOrderByDescending(p => p.Name);
+                break;
+
+            case ProductSortingOptions.PriceAscending:
+                AddOrderByAscending(p => p.Price);
+                break;
+
+            case ProductSortingOptions.PriceDescending:
+                AddOrderByDescending(p => p.Price);
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(queryParams.SortingOptions), queryParams.SortingOptions, null);
+        }
     }
 
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ProductWithBrandAndTypeSpecifications"/> class
+    ///     Initializes a new instance of the <see cref="ProductWithBrandAndTypeBaseSpecifications"/> class
     ///     that retrieves a specific product by its identifier, including its <c>ProductBrand</c>
     ///     and <c>ProductType</c> navigation properties.
     /// </summary>
     /// <param name="id">The unique identifier of the product to retrieve.</param>
-    public ProductWithBrandAndTypeSpecifications(int id)
-        : base(p => p.Id == id)
+    /// <remarks>
+    ///     This constructor uses <b>constructor chaining</b> to call the base class constructor
+    ///     (<see cref="BaseSpecification{TEntity, TKey}"/>) with a filtering expression (<c>p => p.id == id</c>). <br/>
+    ///     This ensures that the specification targets only the product matching the given <paramref name="id"/>. <br/>
+    ///     It also uses <see cref="BaseSpecification{TEntity,TKey}.AddInclude"/> to eagerly load the related <c>ProductBrand</c> and <c>ProductType</c>
+    ///     entities in a single query.
+    /// </remarks>
+    public ProductWithBrandAndTypeBaseSpecifications(int id) : base(p => p.Id == id)
     {
         AddInclude(p => p.ProductBrand);
         AddInclude(p => p.ProductType);

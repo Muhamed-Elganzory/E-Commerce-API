@@ -1,4 +1,6 @@
 using Shared.DTO.Product;
+using Shared.Enums.Product;
+using Shared.Queries;
 
 namespace serviceAbstraction.Contracts.Product;
 
@@ -10,8 +12,13 @@ public interface IProductService
     /// <summary>
     ///     Get all products
     /// </summary>
+    /// <param name="queryParams">
+    ///     An instance of <see cref="ProductQueryParams"/> containing optional filters
+    ///     (e.g., <c>BrandId</c>, <c>TypeId</c>) and sorting preferences
+    ///     (e.g., <see cref="Shared.Enums.Product.ProductSortingOptions"/>).
+    /// </param>
     /// <returns></returns>
-    public Task <IEnumerable<ProductDto>> GetAllProductsAsync();
+    public Task <IEnumerable<ProductDto>> GetAllProductsAsync(ProductQueryParams queryParams);
 
     /// <summary>
     ///     Get product by id
