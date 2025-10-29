@@ -1,5 +1,6 @@
 using DomainLayer.Contracts.Seed;
 using DomainLayer.Contracts.Unit;
+using E_Commerce.Middleware.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Persistence.DB;
 using Persistence.DB.Seed.Product;
@@ -75,6 +76,13 @@ public abstract class Program
 
         // Build the web application host using the configured services and middleware pipeline.
         var app = builder.Build();
+
+        #endregion
+
+        #region Custom Meddileware
+
+        // Apply Custom Middleware
+        app.UseMiddleware<CustomExceptionHandlerMiddleware>();
 
         #endregion
 

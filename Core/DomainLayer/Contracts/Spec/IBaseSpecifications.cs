@@ -43,4 +43,20 @@ public interface IBaseSpecification<TEntity, TKey> where TEntity : BaseEntity<TK
     ///     This will sort products by their <c>Price</c> in descending order.
     /// </example>
     public Expression<Func<TEntity, object>>? OrderByDescending { get; set; }
+
+    /// <summary>
+    ///     Number of items to retrieve per page (page size).
+    /// </summary>
+    public int Take { get; set; }
+
+    /// <summary>
+    ///     Number of items to skip before starting to take results.
+    ///     Calculated as (pageIndex - 1) * pageSize.
+    /// </summary>
+    public int Skip { get; set; }
+
+    /// <summary>
+    ///     Indicates whether pagination should be applied or not.
+    /// </summary>
+    public bool IsPaginated { get; set; }
 }

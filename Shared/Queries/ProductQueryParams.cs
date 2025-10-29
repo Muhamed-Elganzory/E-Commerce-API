@@ -62,4 +62,35 @@ public class ProductQueryParams
     ///     </code>
     /// </example>
     public string? SearchValue { get; set; }
+
+    /// <summary>
+    ///     The default number of items to display per page.
+    /// </summary>
+    private const int DefaultPageSize = 5;
+
+    /// <summary>
+    ///     The maximum allowed number of items per page.
+    /// </summary>
+    private const int MaxPageSize = 10;
+
+    /// <summary>
+    ///     The current page index (starts from 1).
+    /// </summary>
+    public int PageIndex { get; set; } = 1;
+
+    /// <summary>
+    ///     The backing field for the <see cref="PageSize"/> property.
+    /// </summary>
+    private int pageSize { get; set; } = DefaultPageSize;
+
+    /// <summary>
+    ///     Gets or sets the number of items per page.
+    ///     If the assigned value exceeds <see cref="MaxPageSize"/>,
+    ///     it will be automatically limited to the maximum allowed value.
+    /// </summary>
+    public int PageSize
+    {
+        get => pageSize;
+        set => pageSize = value > MaxPageSize ? MaxPageSize : value;
+    }
 }

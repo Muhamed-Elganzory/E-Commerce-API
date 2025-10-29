@@ -4,6 +4,7 @@ using serviceAbstraction.Contracts.Product;
 using serviceAbstraction.Contracts.Service;
 using Shared.DTO.Product;
 using Shared.Enums.Product;
+using Shared.Pagination;
 using Shared.Queries;
 
 namespace Presentation.Controllers.Product;
@@ -100,13 +101,14 @@ public class ProductsController(IServiceManager serviceManager) : ControllerBase
     ///     </code>
     /// </example>
     [HttpGet] // GET: /Products or /api/Products
-    public async Task<ActionResult<IEnumerable<ProductDto>>> GetAllProductsAsync([FromQuery] ProductQueryParams queryParams)
+    // Task<ActionResult<IEnumerable<BrandDto>>> Before apply pagination ==> PaginatedResult<ProductDto>
+    public async Task<ActionResult<PaginatedResult<ProductDto>>> GetAllProductsAsync([FromQuery] ProductQueryParams queryParams)
     {
         // Call ProductService to fetch all products asynchronously (optionally filtered)
         var products = await _serviceManager.ProductService.GetAllProductsAsync(queryParams);
 
         // Return 404 if no products found
-        if (!products.Any()) return NotFound();
+        // if (!products.Any()) return NotFound();
 
         // Return 200 OK with the product list
         return Ok(products);

@@ -78,6 +78,13 @@ namespace Service.Spec.Helper
                 );
             }
 
+            // Apply pagination only if enabled in the base specification
+            if (baseSpecification.IsPaginated)
+            {
+                // Skip the specified number of records and take the defined page size
+                query = query.Skip(baseSpecification.Skip).Take(baseSpecification.Take);
+            }
+
             // Return the composed query
             return query;
         }

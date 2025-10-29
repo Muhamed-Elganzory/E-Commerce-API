@@ -87,5 +87,18 @@ namespace DomainLayer.Contracts.Repository
         ///     The task result contains the matching entity or <c>null</c> if no match is found.
         /// </returns>
         Task<TEntity?> GetByIdAsync(IBaseSpecification<TEntity, TKey> baseSpecification);
+
+        /// <summary>
+        ///     Asynchronously counts the total number of entities that match the given specification criteria.
+        /// </summary>
+        /// <param name="baseSpecification">
+        ///     The specification that defines the filtering and conditions used to count matching entities.
+        /// </param>
+        /// <returns>
+        ///     A task that represents the asynchronous operation.
+        ///     The task result contains the total number of entities that satisfy the specified criteria.
+        /// </returns>
+        Task<int> CountAsync(IBaseSpecification<TEntity, TKey> baseSpecification);
+
     }
 }

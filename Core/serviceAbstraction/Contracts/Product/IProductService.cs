@@ -1,5 +1,6 @@
 using Shared.DTO.Product;
 using Shared.Enums.Product;
+using Shared.Pagination;
 using Shared.Queries;
 
 namespace serviceAbstraction.Contracts.Product;
@@ -18,7 +19,7 @@ public interface IProductService
     ///     (e.g., <see cref="Shared.Enums.Product.ProductSortingOptions"/>).
     /// </param>
     /// <returns></returns>
-    public Task <IEnumerable<ProductDto>> GetAllProductsAsync(ProductQueryParams queryParams);
+    public Task <PaginatedResult<ProductDto>> GetAllProductsAsync(ProductQueryParams queryParams);
 
     /// <summary>
     ///     Get product by id

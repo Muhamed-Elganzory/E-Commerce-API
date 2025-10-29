@@ -1,10 +1,11 @@
 using AutoMapper;
 using DomainLayer.Contracts.Unit;
+using DomainLayer.Exceptions.Product;
 using serviceAbstraction.Contracts.Product;
 using DomainLayer.Models.Product;
 using Service.Spec.Product;
 using Shared.DTO.Product;
-using Shared.Enums.Product;
+using Shared.Pagination;
 using Shared.Queries;
 
 namespace Service.Product;
@@ -78,7 +79,8 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
     ///         var products = await _serviceManager.ProductService.GetAllProductsAsync(queryParams);
     ///     </code>
     /// </example>
-    public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(ProductQueryParams queryParams)
+    // Task<IEnumerable<ProductDto>> Before apply pagination ==> Task<PaginatedResult<ProductDto>>
+    public async Task<PaginatedResult<ProductDto>> GetAllProductsAsync(ProductQueryParams queryParams)
     {
         // (Option 1) Create repository separately, then call GetAllAsync():
         // var repo = await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Product.Product, int>();
@@ -92,13 +94,32 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
         var specification = new ProductWithBrandAndTypeBaseSpecifications(queryParams);
 
         // 2️⃣ Use the baseSpecification to retrieve all products including their related data
-        var products = await (await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Product.Product, int>()).GetAllAsync(specification);
+        var repo = await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Product.Product, int>();
+
+        var products = await repo.GetAllAsync(specification);
 
         // 3️⃣ Map the products to ProductDto objects using AutoMapper
-        var productData = _mapper.Map<IEnumerable<DomainLayer.Models.Product.Product>, IEnumerable<ProductDto>>(products);
+        var productsData = _mapper.Map<IEnumerable<DomainLayer.Models.Product.Product>, IEnumerable<ProductDto>>(products);
 
         // 4️⃣ Return the mapped product data
-        return productData;
+        // return productData;
+
+        // Get number of products in current page
+        var productsCount = productsData.Count();
+
+        // Create a specification used only for counting (without includes or pagination)
+        var countSpec = new ProductCountSpecification(queryParams);
+
+        // Execute count query to get total number of matching products
+        var totalCount = await repo.CountAsync(countSpec);
+
+        // Return paginated result
+        return new PaginatedResult<ProductDto>(
+            productsCount,     // ✅ Page size (items per page)
+            queryParams.PageIndex,     // ✅ Current page index
+            totalCount,                // ✅ Total number of items
+            productsData               // ✅ The current page data
+        );
     }
 
     /// <summary>
@@ -141,6 +162,11 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
         // 3️⃣ Use the baseSpecification to retrieve the product that matches the criteria.
         var product = await repo.GetByIdAsync(specification);
         // ─────────────────────────────────────────────
+
+        if (product == null)
+        {
+            throw new ProductNotFoundException(id);
+        }
 
         // 4️⃣ Map the domain entity (Product) to its DTO (ProductDto) using AutoMapper.
         var productData = _mapper.Map<DomainLayer.Models.Product.Product?, ProductDto?>(product);

@@ -110,4 +110,20 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext): IGeneri
         // Returns null if no matching entity is found.
         return await SpecificationEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specification).FirstOrDefaultAsync();
     }
+
+    /// <summary>
+    ///     Asynchronously counts the total number of entities that satisfy the conditions defined
+    ///     in the provided specification.
+    /// </summary>
+    /// <param name="baseSpecification">
+    ///     The specification that contains filtering criteria, includes, and other query conditions.
+    /// </param>
+    /// <returns>
+    ///     A task representing the asynchronous operation.
+    ///     The task result contains the total count of entities matching the specified criteria.
+    /// </returns>
+    public async Task<int> CountAsync(IBaseSpecification<TEntity, TKey> baseSpecification)
+    {
+        return await SpecificationEvaluator.CreateQuery(_dbContext.Set<TEntity>(), baseSpecification).CountAsync();
+    }
 }

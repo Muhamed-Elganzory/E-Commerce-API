@@ -76,6 +76,22 @@ namespace Service.Spec.Base
         public Expression<Func<TEntity, object>>? OrderByDescending { get; set; }
 
         /// <summary>
+        ///     Number of items to retrieve per page (page size).
+        /// </summary>
+        public int Take { get; set; }
+
+        /// <summary>
+        ///     Number of items to skip before starting to take results.
+        ///     Calculated as (pageIndex - 1) * pageSize.
+        /// </summary>
+        public int Skip { get; set; }
+
+        /// <summary>
+        ///     Indicates whether pagination should be applied or not.
+        /// </summary>
+        public bool IsPaginated { get; set; }
+
+        /// <summary>
         ///     Initializes a new instance of the <see cref="BaseSpecification{TEntity,TKey}"/> class
         ///     with a filtering expression (criteria).
         /// </summary>
@@ -124,6 +140,41 @@ namespace Service.Spec.Base
         protected void AddOrderByDescending(Expression<Func<TEntity, object>> orderByDescending)
         {
             OrderByDescending = orderByDescending;
+        }
+
+        /// <summary>
+        ///     Applies pagination settings based on the provided page size and page index.
+        ///     Calculates how many records to skip and how many to take for the current page.
+        /// </summary>
+        /// <param name="pageSize">The number of items to include per page.</param>
+        /// <param name="pageIndex">The current page index (starting from 1).</param>
+        /// <example>
+        ///     <code>
+        ///         Total = 100 Products  ==>  100 / 10 = 10 Pages
+        ///
+        ///         PageSize = 10, PageIndex = 1
+        ///         Take = 10
+        ///         Skip = (1 - 1) * 10 = 0
+        ///
+        ///         PageSize = 10, PageIndex = 3
+        ///         Take = 10
+        ///         Skip = (3 - 1) * 10 = 20
+        ///     </code>
+        /// </example>
+        /// <remarks>
+        ///     PageIndex starts from 1.
+        ///     For example, pageIndex = 1 will return the first page.
+        /// </remarks>
+        protected void ApplyPagination(int pageSize, int pageIndex)
+        {
+            if (pageIndex <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(pageIndex), "Page index must be greater than zero.");
+            }
+
+            IsPaginated = true;
+            Take = pageSize;
+            Skip = (pageIndex - 1) * pageSize;
         }
     }
 }

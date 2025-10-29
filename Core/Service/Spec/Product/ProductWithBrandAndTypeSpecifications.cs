@@ -1,6 +1,6 @@
+using Shared.Queries;
 using Service.Spec.Base;
 using Shared.Enums.Product;
-using Shared.Queries;
 
 namespace Service.Spec.Product;
 
@@ -37,9 +37,9 @@ public class ProductWithBrandAndTypeBaseSpecifications : BaseSpecification<Domai
     ///     Example predicate expression:
     ///     <code>
     ///     p => (!queryParams.BrandId.HasValue || p.ProductBrandId == queryParams.BrandId)
-    ///          && (!queryParams.TypeId.HasValue || p.ProductTypeId == queryParams.TypeId)
-    ///          && (string.IsNullOrWhiteSpace(queryParams.SearchValue)
-    ///              || p.Name.ToLower().Contains(queryParams.SearchValue.ToLower()))
+    ///          and (!queryParams.TypeId.HasValue || p.ProductTypeId == queryParams.TypeId)
+    ///          and (string.IsNullOrWhiteSpace(queryParams.SearchValue)
+    ///              || p.Name.Contains(queryParams.SearchValue, StringComparison.CurrentCultureIgnoreCase)))
     ///     </code>
     ///     <br/>
     ///
@@ -68,7 +68,7 @@ public class ProductWithBrandAndTypeBaseSpecifications : BaseSpecification<Domai
         : base(p =>
             (!queryParams.BrandId.HasValue || p.ProductBrandId == queryParams.BrandId) &&
             (!queryParams.TypeId.HasValue || p.ProductTypeId == queryParams.TypeId) &&
-            (string.IsNullOrWhiteSpace(queryParams.SearchValue) || p.Name.Contains(queryParams.SearchValue.ToLower())))
+            (string.IsNullOrWhiteSpace(queryParams.SearchValue) || p.Name.ToLower().Contains(queryParams.SearchValue.ToLower())))
     {
         AddInclude(p => p.ProductBrand);
         AddInclude(p => p.ProductType);
@@ -94,6 +94,9 @@ public class ProductWithBrandAndTypeBaseSpecifications : BaseSpecification<Domai
             default:
                 throw new ArgumentOutOfRangeException(nameof(queryParams.SortingOptions), queryParams.SortingOptions, null);
         }
+
+        // Apply pagination settings based on the provided query parameters (page size and page index)
+        ApplyPagination(queryParams.PageSize, queryParams.PageIndex);
     }
 
     /// <summary>
