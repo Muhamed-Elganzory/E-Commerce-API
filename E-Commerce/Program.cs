@@ -1,6 +1,7 @@
 using DomainLayer.Contracts.Seed;
 using DomainLayer.Contracts.Unit;
 using E_Commerce.Middleware.Exceptions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence.DB;
 using Persistence.DB.Seed.Product;
@@ -9,6 +10,7 @@ using Service.Images;
 using Service.Mapping;
 using Service.Service;
 using serviceAbstraction.Contracts.Service;
+using Shared.Errors;
 
 namespace E_Commerce;
 
@@ -69,6 +71,39 @@ public abstract class Program
 
         // Register PictureUrlResolver as a Singleton service in the Dependency Injection (DI) container.
         builder.Services.AddSingleton<PictureUrlResolver>();
+
+        // Configure how ASP.NET Core should handle model validation errors
+        builder.Services.Configure<ApiBehaviorOptions>((options) =>
+        {
+            // Override the default response returned when model validation fails
+            options.InvalidModelStateResponseFactory = (context) =>
+            {
+                // Extract all validation errors from the ModelState
+                var errors = context.ModelState
+
+                    // Keep only entries that actually contain errors
+                    .Where(er => er.Value!.Errors.Any())
+
+                    // Convert each invalid field into a ValidationError object
+                    .Select(er => new ValidationError()
+                    {
+                        // The name of the field that failed validation
+                        Field = er.Key,
+
+                        // The list of error messages for that field
+                        Errors = er.Value!.Errors.Select(e => e.ErrorMessage)
+                    });
+
+                // Create a standard error response object that includes all validation errors
+                var response = new ValidationErrorToReturn()
+                {
+                    ValidationErrors = errors
+                };
+
+                // Return a 400 Bad Request response containing the validation details as JSON
+                return new BadRequestObjectResult(response);
+            };
+        });
 
         #endregion
 
