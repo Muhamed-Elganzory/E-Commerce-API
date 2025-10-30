@@ -1,6 +1,8 @@
 using AutoMapper;
+using DomainLayer.Models.Basket;
 using DomainLayer.Models.Product;
 using Service.Images;
+using Shared.DTO.Basket;
 using Shared.DTO.Product;
 
 namespace Service.Mapping;
@@ -28,6 +30,8 @@ public class MappingProfiles: Profile
 {
     public MappingProfiles()
     {
+        #region Product
+
         // Map from Product to ProductDto
         // Destination Member: BrandName, TypeName from ProductDto
         // Source Member: ProductBrand.Name, ProductType.Name from Product
@@ -43,5 +47,18 @@ public class MappingProfiles: Profile
 
         // Map from ProductType to TypeDto
         CreateMap<ProductType, TypeDto>();
+
+        #endregion
+
+        #region Basket
+
+        // Maps between the domain model (used in backend logic)
+        // and the DTO (used for API requests/responses)
+        CreateMap<CustomerBasket, CustomerBasketDto>().ReverseMap();
+
+        // Maps between the basket item model and its DTO
+        CreateMap<BasketItem, BasketItemDto>().ReverseMap();
+
+        #endregion
     }
 }

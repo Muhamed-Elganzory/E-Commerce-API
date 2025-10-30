@@ -1,16 +1,6 @@
-using DomainLayer.Contracts.Seed;
-using DomainLayer.Contracts.Unit;
-using E_Commerce.Middleware.Exceptions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Persistence.DB;
-using Persistence.DB.Seed.Product;
-using Persistence.Repository.Unit;
+using E_Commerce.Extensions;
 using Service.Images;
-using Service.Mapping;
-using Service.Service;
-using serviceAbstraction.Contracts.Service;
-using Shared.Errors;
+
 
 namespace E_Commerce;
 
@@ -40,70 +30,14 @@ public abstract class Program
         /* My Code */
         #region Dependency Injection Services
 
-        // Add DbContext
-        // Configure the StoreDbContext to use SQL Server with the connection string from appsettings.json.
-        // This sets up the database context for Entity Framework Core to interact with the SQL Server database.
-        builder.Services.AddDbContext<StoreDbContext>(options =>
-        {
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-        });
+        // Separate all services related of InfraStructure
+        builder.Services.InfraStructureService(builder.Configuration);
 
-        // Data Seeding Service
-        // Register the IDataSeeding interface with its implementation DataSeeding in the DI container.
-        // This allows the application to use the DataSeeding service for seeding initial data into
-        // the database when needed.
-        builder.Services.AddScoped<IDataSeeding, DataSeeding>();
+        // Separate all services related of Core
+        builder.Services.CoreServices();
 
-        // Unit Of Work
-        // Register the IUnitOfWork interface with its implementation UnitOfWork in the DI container.
-        // This allows the application to use the UnitOfWork pattern for managing database transactions
-        // and coordinating multiple repository operations.
-        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        // Auto Mapper Service
-        // Register AutoMapper with the DI container and add the MappingProfiles configuration.
-        // This enables object-to-object mapping between domain models and DTOs using the defined profiles.
-        builder.Services.AddAutoMapper(mapper => mapper.AddProfile(new MappingProfiles()));
-
-        // Service Manager
-        // To centralized manager for different services in the application.
-        builder.Services.AddScoped<IServiceManager, ServiceManager>();
-
-        // Register PictureUrlResolver as a Singleton service in the Dependency Injection (DI) container.
-        builder.Services.AddSingleton<PictureUrlResolver>();
-
-        // Configure how ASP.NET Core should handle model validation errors
-        builder.Services.Configure<ApiBehaviorOptions>((options) =>
-        {
-            // Override the default response returned when model validation fails
-            options.InvalidModelStateResponseFactory = (context) =>
-            {
-                // Extract all validation errors from the ModelState
-                var errors = context.ModelState
-
-                    // Keep only entries that actually contain errors
-                    .Where(er => er.Value!.Errors.Any())
-
-                    // Convert each invalid field into a ValidationError object
-                    .Select(er => new ValidationError()
-                    {
-                        // The name of the field that failed validation
-                        Field = er.Key,
-
-                        // The list of error messages for that field
-                        Errors = er.Value!.Errors.Select(e => e.ErrorMessage)
-                    });
-
-                // Create a standard error response object that includes all validation errors
-                var response = new ValidationErrorToReturn()
-                {
-                    ValidationErrors = errors
-                };
-
-                // Return a 400 Bad Request response containing the validation details as JSON
-                return new BadRequestObjectResult(response);
-            };
-        });
+        // Separate all services related of Presentation || Controllers
+        builder.Services.PresentationServices();
 
         #endregion
 
@@ -114,25 +48,16 @@ public abstract class Program
 
         #endregion
 
-        #region Custom Meddileware
+        #region Custom Middleware
 
-        // Apply Custom Middleware
-        app.UseMiddleware<CustomExceptionHandlerMiddleware>();
+        // Separate all services related of Custom Middleware
+        app.CustomMiddleWareExtensions();
 
         #endregion
 
-        /* My Code */
         #region Data Seeding
 
-        // Create a scope to obtain a reference to the database context (StoreDbContext)
-        using (var scope = app.Services.CreateScope())
-        {
-            // Get the IDataSeeding service from the scoped service provider
-            var seeder = scope.ServiceProvider.GetRequiredService<IDataSeeding>();
-
-            // Call the DataSeed method to seed the database with initial data
-            await seeder.DataSeedAsync();
-        }
+        await app.SeedDbAsync();
 
         #endregion
 

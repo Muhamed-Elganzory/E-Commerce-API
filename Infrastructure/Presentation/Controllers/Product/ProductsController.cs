@@ -1,9 +1,11 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Service.Spec.Product;
 using serviceAbstraction.Contracts.Product;
 using serviceAbstraction.Contracts.Service;
 using Shared.DTO.Product;
 using Shared.Enums.Product;
+using Shared.Errors;
 using Shared.Pagination;
 using Shared.Queries;
 
@@ -126,6 +128,10 @@ public class ProductsController(IServiceManager serviceManager) : ControllerBase
     /// </remarks>
     /// <param name="id">Product ID to fetch. Must be an integer.</param>
     /// <returns>HTTP 200 OK with the product, or 404 Not Found if not found.</returns>
+    [ProducesResponseType(typeof(ProductDto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ValidationErrorToReturn), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ErrorToReturn), (int)HttpStatusCode.InternalServerError)]
+    [ProducesResponseType(typeof(ValidationErrorToReturn), (int)HttpStatusCode.BadRequest)]
     [HttpGet("{id:int}")] // GET: /Products/1 or /api/Products/1
     public async Task<ActionResult<ProductDto>> GetProductByIdAsync(int id)
     {

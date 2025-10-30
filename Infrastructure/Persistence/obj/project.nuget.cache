@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "EeBuE5ByDd4=",
+  "dgSpecHash": "Bh89G9qgA20=",
   "success": true,
   "projectFilePath": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Infrastructure/Persistence/Persistence.csproj",
   "expectedPackageFiles": [
@@ -35,12 +35,15 @@
     "/Users/macbook/.nuget/packages/microsoft.identitymodel.tokens/8.0.1/microsoft.identitymodel.tokens.8.0.1.nupkg.sha512",
     "/Users/macbook/.nuget/packages/microsoft.sqlserver.server/1.0.0/microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "/Users/macbook/.nuget/packages/microsoft.win32.systemevents/6.0.0/microsoft.win32.systemevents.6.0.0.nupkg.sha512",
+    "/Users/macbook/.nuget/packages/pipelines.sockets.unofficial/2.2.8/pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
+    "/Users/macbook/.nuget/packages/stackexchange.redis/2.9.32/stackexchange.redis.2.9.32.nupkg.sha512",
     "/Users/macbook/.nuget/packages/system.clientmodel/1.0.0/system.clientmodel.1.0.0.nupkg.sha512",
     "/Users/macbook/.nuget/packages/system.configuration.configurationmanager/6.0.1/system.configuration.configurationmanager.6.0.1.nupkg.sha512",
     "/Users/macbook/.nuget/packages/system.diagnostics.diagnosticsource/6.0.1/system.diagnostics.diagnosticsource.6.0.1.nupkg.sha512",
     "/Users/macbook/.nuget/packages/system.drawing.common/6.0.0/system.drawing.common.6.0.0.nupkg.sha512",
     "/Users/macbook/.nuget/packages/system.formats.asn1/8.0.2/system.formats.asn1.8.0.2.nupkg.sha512",
     "/Users/macbook/.nuget/packages/system.identitymodel.tokens.jwt/6.35.0/system.identitymodel.tokens.jwt.6.35.0.nupkg.sha512",
+    "/Users/macbook/.nuget/packages/system.io.pipelines/5.0.1/system.io.pipelines.5.0.1.nupkg.sha512",
     "/Users/macbook/.nuget/packages/system.memory/4.5.4/system.memory.4.5.4.nupkg.sha512",
     "/Users/macbook/.nuget/packages/system.memory.data/1.0.2/system.memory.data.1.0.2.nupkg.sha512",
     "/Users/macbook/.nuget/packages/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg.sha512",
