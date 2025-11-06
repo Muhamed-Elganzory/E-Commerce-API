@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\Core\Service Abstraction\Service Abstraction.csproj" />
         <ProjectReference Include="..\..\Core\ServiceAbstraction\ServiceAbstraction.csproj" />
         <ProjectReference Include="..\..\Core\Service\Service.csproj" />
     </ItemGroup>

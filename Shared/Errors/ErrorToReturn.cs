@@ -15,4 +15,9 @@ public class ErrorToReturn
     ///     Gets or sets a descriptive error message that provides details about the failure.
     /// </summary>
     public string ErrorMessage { get; set; } = string.Empty;
+
+    /// <summary>
+    ///
+    /// </summary>
+    public List<string>? Errors { get; set; } = null!;
 }

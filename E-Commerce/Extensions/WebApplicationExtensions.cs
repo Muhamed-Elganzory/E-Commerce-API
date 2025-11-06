@@ -20,8 +20,17 @@ public static class WebApplicationExtensions
         // Create a new scope to access scoped services
         using (var scope = app.Services.CreateScope())
         {
-            // Retrieve the IDataSeeding service from the service provider
+            // Retrieve the IDataSeeding service instance from the scoped service provider.
+            // This service is responsible for populating initial data into the database (e.g., default products, roles, or users).
             var seeder = scope.ServiceProvider.GetRequiredService<IDataSeeding>();
+
+            // Seed application-specific data (e.g., products, categories, orders, etc.).
+            // This ensures the main database has the necessary base data when the application starts.
+            await seeder.DataSeedAsync();
+
+            // Seed Identity-related data (e.g., default roles, admin user, permissions, etc.).
+            // This populates the Identity database with essential authentication and authorization data.
+            await seeder.IdentityDataSeedAsync();
 
             // Execute the data seeding logic to populate the database
             await seeder.DataSeedAsync();

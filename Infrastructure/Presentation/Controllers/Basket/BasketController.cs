@@ -1,5 +1,6 @@
 using Shared.DTO.Basket;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Controllers.Shared;
 using serviceAbstraction.Contracts.Service;
 
 namespace Presentation.Controllers.Basket;
@@ -8,9 +9,7 @@ namespace Presentation.Controllers.Basket;
 ///     Controller responsible for managing customer baskets in the system.
 ///     Provides endpoints to get, create/update, and delete baskets.
 /// </summary>
-[ApiController]
-[Route("api/[controller]")]
-public class BasketController(IServiceManager serviceManager) : ControllerBase
+public class BasketController(IServiceManager serviceManager) : BaseController
 {
     /// <summary>
     ///     Provides access to the application services (including basket service).

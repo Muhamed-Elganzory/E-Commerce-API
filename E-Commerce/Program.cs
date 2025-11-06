@@ -1,5 +1,4 @@
 using E_Commerce.Extensions;
-using Service.Images;
 
 
 namespace E_Commerce;

@@ -1,6 +1,8 @@
 using System.Text.Json;
 using DomainLayer.Contracts.Seed;
+using DomainLayer.Models.Auth;
 using DomainLayer.Models.Product;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.DB.Seed.Product;
@@ -19,10 +21,14 @@ namespace Persistence.DB.Seed.Product;
 /// </remarks>
 /// </summary>
 /// <param name="dbContext"></param>
-public class DataSeeding(StoreDbContext dbContext): IDataSeeding
+/// <param name="userManager"></param>
+/// <param name="roleManager"></param>
+public class DataSeeding(StoreDbContext dbContext, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager): IDataSeeding
 {
     // Property injection of DbContext
     private readonly StoreDbContext _dbContext = dbContext;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly RoleManager<IdentityRole> _roleManager = roleManager;
 
     // Data seeding method to seed initial data into the database
     public async Task DataSeedAsync()
@@ -163,6 +169,77 @@ public class DataSeeding(StoreDbContext dbContext): IDataSeeding
                 Console.WriteLine($"❌ Error while saving seeded data: {ex.Message}");
                 throw;
             }
+        }
+    }
+
+    /// <summary>
+    ///     Seeds default roles and users into the Identity database.
+    /// </summary>
+    /// <remarks>
+    ///     This method ensures that required roles (e.g., Admin, SuperAdmin)
+    ///     and initial users are created when the application starts for the first time.
+    ///
+    /// Note:
+    ///     - Both <see cref="_roleManager"/> and <see cref="_userManager"/> automatically
+    ///     save their changes to the database when CreateAsync or AddToRoleAsync is called,
+    ///     so manual SaveChanges() calls are not required.
+    /// </remarks>
+    public async Task IdentityDataSeedAsync()
+    {
+        try
+        {
+            // ✅ Seed default roles if they do not exist
+            if (!_roleManager.Roles.Any())
+            {
+                await _roleManager.CreateAsync(new IdentityRole("Admin"));
+                await _roleManager.CreateAsync(new IdentityRole("SuperAdmin"));
+            }
+
+            // ✅ Seed default users if none exist
+            if (!_userManager.Users.Any())
+            {
+                // Create the SuperAdmin user
+                var user01 = new ApplicationUser
+                {
+                    DisplayName = "Mohamed Elganzory",
+                    PhoneNumber = "01061650979",
+                    Email = "mohamedelganzory621@gmail.com",
+                    UserName = "superadmin",
+                    EmailConfirmed = true
+                };
+
+                // Create the Admin user
+                var user02 = new ApplicationUser
+                {
+                    DisplayName = "Mohamed Elganzory",
+                    PhoneNumber = "01061650979",
+                    Email = "mohamedelganzory621@gmail.com",
+                    UserName = "admin",
+                    EmailConfirmed = true
+                };
+
+                // ✅ Add users to the database with default passwords
+                var result01 = await _userManager.CreateAsync(user01, "P@ssw0rd");
+                var result02 = await _userManager.CreateAsync(user02, "P@ssw0rd");
+
+                if (result01.Succeeded && result02.Succeeded)
+                {
+                    // Reload user from DB after created
+                    var createdUser1 = await _userManager.FindByNameAsync("superadmin");
+                    var createdUser2 = await _userManager.FindByNameAsync("admin");
+
+                    // ✅ Assign roles to the created users
+                    if (createdUser1 != null) await _userManager.AddToRoleAsync(createdUser1, "Admin");
+                    if (createdUser2 != null) await _userManager.AddToRoleAsync(createdUser2, "SuperAdmin");
+                }
+
+            }
+        }
+        catch (Exception e)
+        {
+            // ❌ Log the exception for troubleshooting
+            Console.WriteLine(e);
+            throw;
         }
     }
 }

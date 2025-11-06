@@ -1,7 +1,10 @@
 using DomainLayer.Contracts.Repository.Basket;
 using DomainLayer.Contracts.Seed;
 using DomainLayer.Contracts.Unit;
+using DomainLayer.Models.Auth;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Auth.Context;
 using Persistence.DB;
 using Persistence.DB.Seed.Product;
 using Persistence.Repository.Basket;
@@ -40,6 +43,14 @@ public static class InfraStructureServicesExtensions
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
 
+        // Register the Identity database context (for authentication & authorization)
+        // The connection string is retrieved from appsettings.json ("IdentityConnection").
+        // This enables Entity Framework Core to interact with the SQL Server database.
+        services.AddDbContext<StoreIdentityDbContext>(options =>
+        {
+            options.UseSqlServer(configuration.GetConnectionString("IdentityConnection"));
+        });
+
         // Register the Unit of Work pattern.
         // The IUnitOfWork interface is linked to its concrete implementation UnitOfWork,
         // allowing dependency injection to manage transactions and repository coordination.
@@ -60,6 +71,26 @@ public static class InfraStructureServicesExtensions
 
         // Basket Repository (Register Redis-based Basket Repository)
         services.AddScoped<IBasketRepository, BasketRepository>();
+
+        // ------------------------------------------------------------
+        // Register ASP.NET Core Identity services in the dependency injection container.
+        //
+        // 1️⃣ AddIdentityCore<ApplicationUser>()
+        //     - Registers the core Identity system using the custom ApplicationUser entity.
+        //     - Provides services for managing users (UserManager, password hashing, validation, etc.).
+        //
+        // 2️⃣ AddRoles<IdentityRole>()
+        //     - Adds support for Role-based authorization.
+        //     - Enables RoleManager and allows assigning users to specific roles (e.g., Admin, User, etc.).
+        //
+        // 3️⃣ AddEntityFrameworkStores<StoreIdentityDbContext>()
+        //     - Configures Identity to use Entity Framework Core for persistence.
+        //     - Stores all Identity-related data (Users, Roles, Claims, Tokens, etc.)
+        //       in the specified StoreIdentityDbContext connected to the Identity database.
+        // ------------------------------------------------------------
+        services.AddIdentityCore<ApplicationUser>()
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<StoreIdentityDbContext>();
 
         // Return the modified service collection for chaining.
         return services;

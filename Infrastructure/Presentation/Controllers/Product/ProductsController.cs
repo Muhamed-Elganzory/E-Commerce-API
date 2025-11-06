@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Controllers.Shared;
 using Service.Spec.Product;
 using serviceAbstraction.Contracts.Product;
 using serviceAbstraction.Contracts.Service;
@@ -45,10 +46,7 @@ namespace Presentation.Controllers.Product;
 /// <param name="serviceManager">
 ///     The injected <see cref="IServiceManager"/> instance used to access product-related business logic.
 /// </param>
-[ApiController]
-// [Route("[controller]")]
-[Route("api/[controller]")]
-public class ProductsController(IServiceManager serviceManager) : ControllerBase
+public class ProductsController(IServiceManager serviceManager) : BaseController
 {
     /// <summary>
     ///     Reference to the Service Manager, which provides access to all business logic services.
