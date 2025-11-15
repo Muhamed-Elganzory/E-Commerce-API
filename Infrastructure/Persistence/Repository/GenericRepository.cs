@@ -3,6 +3,7 @@ using DomainLayer.Models.Shared;
 using Microsoft.EntityFrameworkCore;
 using DomainLayer.Contracts.Repository;
 using DomainLayer.Contracts.Spec;
+using Persistence.DB.Context;
 using Service.Spec.Helper;
 
 namespace Persistence.Repository;

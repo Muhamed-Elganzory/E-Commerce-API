@@ -9,15 +9,6 @@ namespace DomainLayer.Contracts.Repository.Basket;
 public interface IBasketRepository
 {
     /// <summary>
-    ///     Retrieves a customer's basket by its unique key (usually the basket ID or user ID).
-    /// </summary>
-    /// <param name="key">The unique identifier for the basket.</param>
-    /// <returns>
-    ///     The <see cref="CustomerBasket"/> associated with the given key, or null if not found.
-    /// </returns>
-    public Task<CustomerBasket?> GetBasketAsync(string key);
-
-    /// <summary>
     ///     Creates a new basket or updates an existing one in the data store (e.g., Redis).
     /// </summary>
     /// <param name="basket">The basket object containing all basket items and data.</param>
@@ -29,6 +20,15 @@ public interface IBasketRepository
     ///     The created or updated <see cref="CustomerBasket"/> instance.
     /// </returns>
     public Task<CustomerBasket?> CreateOrUpdateBasketAsync(CustomerBasket basket, TimeSpan? timeToLive = null);
+
+    /// <summary>
+    ///     Retrieves a customer's basket by its unique key (usually the basket ID or user ID).
+    /// </summary>
+    /// <param name="key">The unique identifier for the basket.</param>
+    /// <returns>
+    ///     The <see cref="CustomerBasket"/> associated with the given key, or null if not found.
+    /// </returns>
+    public Task<CustomerBasket?> GetBasketAsync(string key);
 
     /// <summary>
     ///     Deletes a customer's basket from the data store.

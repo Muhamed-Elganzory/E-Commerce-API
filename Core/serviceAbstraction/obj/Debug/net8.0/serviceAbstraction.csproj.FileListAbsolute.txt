@@ -1,8 +1,10 @@
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/bin/Debug/net8.0/ServiceAbstraction.deps.json
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/bin/Debug/net8.0/ServiceAbstraction.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/bin/Debug/net8.0/ServiceAbstraction.pdb
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/bin/Debug/net8.0/DomainLayer.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/bin/Debug/net8.0/Shared.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/bin/Debug/net8.0/Shared.pdb
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/bin/Debug/net8.0/DomainLayer.pdb
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/obj/Debug/net8.0/ServiceAbstraction.csproj.AssemblyReference.cache
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/obj/Debug/net8.0/ServiceAbstraction.GeneratedMSBuildEditorConfig.editorconfig
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/ServiceAbstraction/obj/Debug/net8.0/ServiceAbstraction.AssemblyInfoInputs.cache

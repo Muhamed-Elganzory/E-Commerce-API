@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Controllers.Shared;
 using Service.Spec.Product;
@@ -101,6 +102,7 @@ public class ProductsController(IServiceManager serviceManager) : BaseController
     ///     </code>
     /// </example>
     [HttpGet] // GET: /Products or /api/Products
+    [Authorize] // => ServicesRegistration.AddJwtService => Allow service in program.cs
     // Task<ActionResult<IEnumerable<BrandDto>>> Before apply pagination ==> PaginatedResult<ProductDto>
     public async Task<ActionResult<PaginatedResult<ProductDto>>> GetAllProductsAsync([FromQuery] ProductQueryParams queryParams)
     {

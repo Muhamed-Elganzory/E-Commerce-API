@@ -1,28 +1,32 @@
 using AutoMapper;
-using DomainLayer.Contracts.Repository.Basket;
 using DomainLayer.Contracts.Unit;
 using DomainLayer.Models.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Service.Auth;
 using Service.Basket;
+using Service.Order;
 using Service.Product;
 using ServiceAbstraction.Contracts.Auth;
 using serviceAbstraction.Contracts.Basket;
+using serviceAbstraction.Contracts.Order;
 using serviceAbstraction.Contracts.Product;
 using serviceAbstraction.Contracts.Service;
+using DomainLayer.Contracts.Repository.Basket;
 
 namespace Service.Service
 {
+    // 🔹 Go To ServiceManagerWithDelegate
     /// <summary>
     ///     Implements the <see cref="IServiceManager"/> interface.
     ///     <para>
     ///         Acts as a centralized entry point for accessing all application services.
-    ///         Uses lazy initialization to ensure that each service is instantiated only when first accessed,
-    ///         optimizing resource utilization and improving performance.
+    ///         Uses <see cref="Lazy{T}"/> initialization to ensure that each service
+    ///         is instantiated only when first accessed — optimizing resource usage
+    ///         and improving application performance.
     ///     </para>
     /// </summary>
-    public class ServiceManager : IServiceManager
+    public class ServiceManager // : IServiceManager 🔹 To Implementation Go ServiceManagerWithDelegate
     {
         /// <summary>
         ///     Lazily initialized product service for managing product-related operations.
@@ -38,6 +42,12 @@ namespace Service.Service
         ///     Lazily initialized authentication service for handling user authentication logic.
         /// </summary>
         private readonly Lazy<IAuthenticationService> _authenticationService;
+
+        /// <summary>
+        ///     Lazily initialized order service for managing order creation, retrieval,
+        ///     and delivery-related operations.
+        /// </summary>
+        private readonly Lazy<IOrderService> _orderService;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="ServiceManager"/> class.
@@ -61,11 +71,17 @@ namespace Service.Service
         ///     The application configuration instance used to access environment settings,
         ///     app secrets, and JWT authentication parameters.
         /// </param>
-        public ServiceManager(IUnitOfWork unitOfWork, IMapper mapper, IBasketRepository basketRepository, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public ServiceManager(
+            IUnitOfWork unitOfWork,
+            IMapper mapper,
+            IBasketRepository basketRepository,
+            UserManager<ApplicationUser> userManager,
+            IConfiguration configuration)
         {
             _productService = new Lazy<IProductService>(() => new ProductService(unitOfWork, mapper));
             _basketService = new Lazy<IBasketService>(() => new BasketService(basketRepository, mapper));
-            _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(userManager, configuration));
+            _authenticationService = new Lazy<IAuthenticationService>(() => new AuthenticationService(userManager, configuration, mapper));
+            _orderService = new Lazy<IOrderService>(() => new OrderService(basketRepository, mapper, unitOfWork));
         }
 
         /// <summary>
@@ -82,5 +98,11 @@ namespace Service.Service
         ///     Gets the authentication service responsible for user login, registration, and token handling.
         /// </summary>
         public IAuthenticationService AuthenticationService => _authenticationService.Value;
+
+        /// <summary>
+        ///     Gets the order service responsible for creating and managing customer orders,
+        ///     including order items, delivery methods, and payment integration.
+        /// </summary>
+        public IOrderService OrderService => _orderService.Value;
     }
 }

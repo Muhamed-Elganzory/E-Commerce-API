@@ -1,5 +1,6 @@
 using ServiceAbstraction.Contracts.Auth;
 using serviceAbstraction.Contracts.Basket;
+using serviceAbstraction.Contracts.Order;
 using serviceAbstraction.Contracts.Product;
 
 namespace serviceAbstraction.Contracts.Service
@@ -21,7 +22,7 @@ namespace serviceAbstraction.Contracts.Service
         ///         and pagination logic across the application.
         ///     </para>
         /// </summary>
-        IProductService ProductService { get; }
+        public IProductService ProductService { get; }
 
         /// <summary>
         ///     Provides access to the basket-related business logic and operations.
@@ -30,7 +31,7 @@ namespace serviceAbstraction.Contracts.Service
         ///         and deletion from the persistent storage (e.g., Redis).
         ///     </para>
         /// </summary>
-        IBasketService BasketService { get; }
+        public IBasketService BasketService { get; }
 
         /// <summary>
         ///     Provides access to authentication and authorization operations.
@@ -39,6 +40,16 @@ namespace serviceAbstraction.Contracts.Service
         ///         through the <see cref="IAuthenticationService"/>.
         ///     </para>
         /// </summary>
-        IAuthenticationService AuthenticationService { get; }
+        public IAuthenticationService AuthenticationService { get; }
+
+        /// <summary>
+        ///     Provides access to order management operations.
+        ///     <para>
+        ///         Handles order creation, retrieval, and persistence logic.
+        ///         Manages related entities such as <c>OrderItems</c>, <c>DeliveryMethod</c>,
+        ///         and <c>ShippingAddress</c>, ensuring consistency across the ordering process.
+        ///     </para>
+        /// </summary>
+        public IOrderService OrderService { get; }
     }
 }

@@ -302,7 +302,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/DomainLayer.csproj": {
+                "projectPath": "/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/Core/DomainLayer/DomainLayer.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

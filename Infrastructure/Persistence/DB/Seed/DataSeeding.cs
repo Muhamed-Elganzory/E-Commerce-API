@@ -1,11 +1,13 @@
 using System.Text.Json;
 using DomainLayer.Contracts.Seed;
 using DomainLayer.Models.Auth;
+using DomainLayer.Models.Order;
 using DomainLayer.Models.Product;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Persistence.DB.Context;
 
-namespace Persistence.DB.Seed.Product;
+namespace Persistence.DB.Seed;
 
 /// <summary>
 ///     Data seeding class to seed initial data into the database
@@ -42,7 +44,7 @@ public class DataSeeding(StoreDbContext dbContext, UserManager<ApplicationUser> 
         if (pendingMigrations.Any())
         {
             // Migrate it used in updating the database schema to the latest version
-            _dbContext.Database.Migrate();
+            await _dbContext.Database.MigrateAsync();
         }
 
         // Seed Product Brands, if not already [seeded || data] add your seeding logic here
@@ -51,7 +53,7 @@ public class DataSeeding(StoreDbContext dbContext, UserManager<ApplicationUser> 
             // Read the JSON file
             // ReadAllText it used with sync streams to block the main thread
             // OpenRead it used with async streams to avoid blocking the main thread
-            var brandsData = File.OpenRead("../Infrastructure/Persistence/DB/Seed/Product/JSON/brands.json");
+            var brandsData = File.OpenRead("../Infrastructure/Persistence/DB/Seed/Data/Product/brands.json");
 
             {
                 // Deserialize the JSON data to a list of ProductBrand objects, to add it to the database
@@ -93,7 +95,7 @@ public class DataSeeding(StoreDbContext dbContext, UserManager<ApplicationUser> 
             // Read the JSON file
             // ReadAllText it used with sync streams to block the main thread
             // OpenRead it used with async streams to avoid blocking the main thread
-            var typesData = File.OpenRead("../Infrastructure/Persistence/DB/Seed/Product/JSON/types.json");
+            var typesData = File.OpenRead("../Infrastructure/Persistence/DB/Seed/Data/Product/types.json");
 
             {
                 // Deserialize the JSON data to a list of ProductType objects, to add it to the database
@@ -129,44 +131,70 @@ public class DataSeeding(StoreDbContext dbContext, UserManager<ApplicationUser> 
             }
         }
 
-        // Seed Products, if not already [seeded || data] add your seeding logic here
+        // ✅ Seed Products, if not already [seeded || data exists], add your seeding logic here
         if (!_dbContext.Products.Any())
         {
-            // Read the JSON file
-            // ReadAllText it used with sync streams to block the main thread
-            // OpenRead it used with async streams to avoid blocking the main thread
-            var productsData = File.OpenRead("../Infrastructure/Persistence/DB/Seed/Product/JSON/products.json");
+            // Read the JSON file asynchronously to avoid blocking the main thread
+            await using var productsData = File.OpenRead("../Infrastructure/Persistence/DB/Seed/Data/Product/products.json");
 
+            // Deserialize the JSON data to a list of Product objects
+            var productsSerialized = await JsonSerializer.DeserializeAsync<List<DomainLayer.Models.Product.Product>>(productsData);
+
+            // Check if deserialization was successful and the list is not empty
+            if (productsSerialized is not null && productsSerialized.Any())
             {
-                // Deserialize the JSON data to a list of Product objects, to add it to the database
-                // Deserialize it used with sync streams to block the main thread
-                // DeserializeAsync it used with async streams to avoid blocking the main thread
-                var productsSerialized = await JsonSerializer.DeserializeAsync<List<DomainLayer.Models.Product.Product>>(productsData);
-
-                // Check if deserialization was successful and the list is not empty
-                if (productsSerialized is not null && productsSerialized.Any())
-                {
-                    // Add the deserialized data to the DbContext
-                    // AddRange it used with sync streams to block the main thread
-                    // AddRangeAsync it used with async streams to avoid blocking the main thread
-                    await _dbContext.AddRangeAsync(productsSerialized);
-                }
-                else
-                {
-                    throw new Exception("No Products Data Found");
-                }
+                // Add the deserialized data to the DbContext asynchronously
+                await _dbContext.AddRangeAsync(productsSerialized);
+            }
+            else
+            {
+                throw new Exception("❌ No Products Data Found in JSON file.");
             }
 
             // Save changes to the database
             try
             {
-                // SaveChanges it used with sync streams to block the main thread
-                // SaveChangesAsync it used with async streams to avoid blocking the main thread
                 await _dbContext.SaveChangesAsync();
+                Console.WriteLine("✅ Products seeding completed successfully.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error while saving seeded data: {ex.Message}");
+                Console.WriteLine($"❌ Error while saving seeded products: {ex.Message}");
+                throw;
+            }
+        }
+
+        // ✅ Seed Delivery Methods if not already seeded
+        if (!_dbContext.DeliveryMethods.Any())
+        {
+            // Read the JSON file asynchronously
+            await using var deliveryData = File.OpenRead("../Infrastructure/Persistence/DB/Seed/Data/Order/delivery.json");
+
+            if (deliveryData.Length == 0)
+                throw new Exception("❌ Delivery JSON file is empty.");
+
+            // Deserialize JSON to a list of DeliveryMethod objects
+            var deliverySerialized = await JsonSerializer.DeserializeAsync<List<DeliveryMethod>>(deliveryData);
+
+            // Check if deserialization was successful
+            if (deliverySerialized is not null && deliverySerialized.Any())
+            {
+                await _dbContext.DeliveryMethods.AddRangeAsync(deliverySerialized);
+            }
+            else
+            {
+                throw new Exception("❌ No delivery data found in JSON file.");
+            }
+
+            // Save changes to the database
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+                Console.WriteLine("✅ Delivery methods seeding completed successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Error while saving seeded delivery data: {ex.Message}");
                 throw;
             }
         }
@@ -211,9 +239,9 @@ public class DataSeeding(StoreDbContext dbContext, UserManager<ApplicationUser> 
                 // Create the Admin user
                 var user02 = new ApplicationUser
                 {
-                    DisplayName = "Mohamed Elganzory",
-                    PhoneNumber = "01061650979",
-                    Email = "mohamedelganzory621@gmail.com",
+                    DisplayName = "Ahmed Elganzory",
+                    PhoneNumber = "01072635464",
+                    Email = "ahmed@gmail.com",
                     UserName = "admin",
                     EmailConfirmed = true
                 };
@@ -229,8 +257,8 @@ public class DataSeeding(StoreDbContext dbContext, UserManager<ApplicationUser> 
                     var createdUser2 = await _userManager.FindByNameAsync("admin");
 
                     // ✅ Assign roles to the created users
-                    if (createdUser1 != null) await _userManager.AddToRoleAsync(createdUser1, "Admin");
-                    if (createdUser2 != null) await _userManager.AddToRoleAsync(createdUser2, "SuperAdmin");
+                    if (createdUser1 != null) await _userManager.AddToRoleAsync(createdUser1, "SuperAdmin");
+                    if (createdUser2 != null) await _userManager.AddToRoleAsync(createdUser2, "Admin");
                 }
 
             }

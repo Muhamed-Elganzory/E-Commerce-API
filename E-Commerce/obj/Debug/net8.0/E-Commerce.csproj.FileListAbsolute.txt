@@ -10,6 +10,7 @@
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/bin/Debug/net8.0/Azure.Core.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/bin/Debug/net8.0/Azure.Identity.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/bin/Debug/net8.0/Humanizer.dll
+/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/bin/Debug/net8.0/Microsoft.AspNetCore.Cryptography.Internal.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/bin/Debug/net8.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/bin/Debug/net8.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
@@ -163,4 +164,3 @@
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/obj/Debug/net8.0/E-Commerce.pdb
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/obj/Debug/net8.0/E-Commerce.genruntimeconfig.cache
 /Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/obj/Debug/net8.0/ref/E-Commerce.dll
-/Users/macbook/Desktop/Ful-Stack/2-Back End/8- API/E-Commerce/E-Commerce/E-Commerce/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll

@@ -1,6 +1,16 @@
+using Service.Auth;
+using Service.Basket;
 using Service.Images;
+using Service.Images.Order;
+using Service.Images.Product;
 using Service.Mapping;
+using Service.Order;
+using Service.Product;
 using Service.Service;
+using ServiceAbstraction.Contracts.Auth;
+using serviceAbstraction.Contracts.Basket;
+using serviceAbstraction.Contracts.Order;
+using serviceAbstraction.Contracts.Product;
 using serviceAbstraction.Contracts.Service;
 
 namespace E_Commerce.Extensions;
@@ -24,21 +34,81 @@ public static class CoreServicesExtensions
         // This allows automatic mapping between domain models and DTOs.
         services.AddAutoMapper(mapper => mapper.AddProfile(new MappingProfiles()));
 
-        // 🔹 Service Manager Registration
+        #region Service Manager
+
+        // Service Manager Registration
+        // 🔹 Service Manager With Lazy Implementation
         // Registers IServiceManager and its concrete implementation ServiceManager.
         // The ServiceManager acts as a central point to access all business services.
-        services.AddScoped<IServiceManager, ServiceManager>();
+        // services.AddScoped<IServiceManager, ServiceManager>();
 
-        // Register PictureUrlResolver as a Singleton service in the Dependency Injection (DI) container.
+        // ============================================================================
+        //  SERVICE MANAGER REGISTRATION
+        // ============================================================================
+
+        // 🔹 Register the Service Manager that uses delegates (factory functions)
+        //     This enables lazy resolution of services and avoids unnecessary allocations.
+        services.AddScoped<IServiceManager, ServiceManagerWithDelegate>();
+
+        // ============================================================================
+        //  PRODUCT SERVICE REGISTRATION
+        // ============================================================================
+
+        // Main service registration
+        services.AddScoped<IProductService, ProductService>();
+
+        // Factory delegate (used by ServiceManagerWithDelegate for lazy loading)
+        services.AddScoped<Func<IProductService>>(
+            provider => provider.GetRequiredService<IProductService>
+        );
+
+        // ============================================================================
+        //  BASKET SERVICE REGISTRATION
+        // ============================================================================
+
+        services.AddScoped<IBasketService, BasketService>();
+
+        // Factory delegate
+        services.AddScoped<Func<IBasketService>>(
+            provider => provider.GetRequiredService<IBasketService>
+        );
+
+        // ============================================================================
+        //  ORDER SERVICE REGISTRATION
+        // ============================================================================
+
+        services.AddScoped<IOrderService, OrderService>();
+
+        // Factory delegate
+        services.AddScoped<Func<IOrderService>>(
+            provider => provider.GetRequiredService<IOrderService>
+        );
+
+        // ============================================================================
+        //  AUTHENTICATION SERVICE REGISTRATION
+        // ============================================================================
+
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+        // Factory delegate
+        services.AddScoped<Func<IAuthenticationService>>(
+            provider => provider.GetRequiredService<IAuthenticationService>
+        );
+
+        #endregion
+
+        #region PictureUrlResolver
+
+        // Register ProductPictureUrlResolver as a Singleton service in the Dependency Injection (DI) container.
         // -----------------------------------------------------------------------------
         // 🧩 What it does:
-        // The PictureUrlResolver class is used by AutoMapper to generate full image URLs
+        // The ProductPictureUrlResolver class is used by AutoMapper to generate full image URLs
         // for ProductDto objects by reading the BaseURL value from appsettings.json (via IConfiguration).
         // It resolves image paths dynamically during object mapping (e.g., mapping Product → ProductDto).
         //
         // 🕓 Why Singleton:
-        // - IConfiguration (used inside PictureUrlResolver) is already registered as a Singleton.
-        // - PictureUrlResolver does not hold any user- or request-specific data (it's stateless).
+        // - IConfiguration (used inside ProductPictureUrlResolver) is already registered as a Singleton.
+        // - ProductPictureUrlResolver does not hold any user- or request-specific data (it's stateless).
         // - Therefore, registering it as a Singleton is efficient — only one instance is created and reused
         //   throughout the application's lifetime, reducing memory allocations and improving performance.
         //
@@ -47,8 +117,13 @@ public static class CoreServicesExtensions
         // - ⚡ AddTransient → Creates a new instance every time it’s requested (adds overhead for stateless logic).
         // - ♾️ AddSingleton → Creates one instance for the entire app lifetime ( the best choice here ).
 
-        // Register PictureUrlResolver as a Singleton service in the Dependency Injection (DI) container.
-        services.AddSingleton<PictureUrlResolver>();
+        // Register ProductPictureUrlResolver as a Singleton service in the Dependency Injection (DI) container.
+        services.AddSingleton<ProductPictureUrlResolver>();
+
+        //
+        services.AddSingleton<OrderItemPictureUrlResolver>();
+
+        #endregion
 
         // Return the service collection for fluent chaining
         return services;

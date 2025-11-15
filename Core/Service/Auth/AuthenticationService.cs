@@ -1,9 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using AutoMapper;
 using DomainLayer.Exceptions.Auth;
 using DomainLayer.Models.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ServiceAbstraction.Contracts.Auth;
@@ -20,7 +22,7 @@ namespace Service.Auth
     ///     operations like verifying passwords, creating users, and handling tokens.
     /// </remarks>
     /// <param name="userManager">The ASP.NET Core Identity user manager service.</param>
-    public class AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration configuration) : IAuthenticationService
+    public class AuthenticationService(UserManager<ApplicationUser> userManager, IConfiguration configuration, IMapper mapper) : IAuthenticationService
     {
         /// <summary>
         ///     Instance of <see cref="UserManager{TUser}"/> used to interact with user data.
@@ -28,9 +30,17 @@ namespace Service.Auth
         private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         /// <summary>
-        ///
+        ///     Provides access to application configuration settings.
+        ///     Used primarily for retrieving JWT configuration values such as
+        ///     <c>Issuer</c>, <c>Audience</c>, and <c>SecretKey</c>.
         /// </summary>
         private readonly IConfiguration _configuration = configuration;
+
+        /// <summary>
+        ///     Provides object-object mapping capabilities between entities and DTOs
+        ///     using AutoMapper. Simplifies data transfer between layers.
+        /// </summary>
+        private readonly IMapper _mapper = mapper;
 
         /// <summary>
         ///     Authenticates a user by validating their email and password.
@@ -105,17 +115,114 @@ namespace Service.Auth
         }
 
         /// <summary>
-        ///     Logs out the currently authenticated user by invalidating their session or token.
+        ///     Checks whether a user with the given email exists in the system.
         /// </summary>
+        /// <param name="email">The email address to check.</param>
         /// <returns>
-        ///     A boolean indicating whether the logout operation succeeded (<c>true</c>) or failed (<c>false</c>).
+        ///     <c>true</c> if a user with the provided email exists; otherwise, <c>false</c>.
         /// </returns>
-        /// <exception cref="NotImplementedException">
-        ///     This method is not yet implemented.
-        /// </exception>
-        public Task<bool> Logout()
+        public async Task<bool> CheckEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            // 🔹 Try to find the user by email in the Identity store
+            var user = await _userManager.FindByEmailAsync(email);
+
+            // 🔹 Return true if the user exists, otherwise false
+            return user is not null;
+        }
+
+        /// <summary>
+        ///     Retrieves the address information of the currently logged-in user.
+        /// </summary>
+        /// <param name="email">The email address of the user.</param>
+        /// <returns>
+        ///     An <see cref="AddressDto"/> object containing the user's address information.
+        /// </returns>
+        /// <exception cref="UserNotFoundException">
+        ///     Thrown if no user is found with the provided email.
+        /// </exception>
+        /// <exception cref="AddressNotFoundException">
+        ///     Thrown if the user exists but has no address associated.
+        /// </exception>
+        public async Task<AddressDto> GetCurrentUserAdressAsync(string email)
+        {
+            // 🔹 Load user with their address (via eager loading)
+            var user = await _userManager.Users
+                .Include(a => a.Address)
+                .FirstOrDefaultAsync(e => e.Email == email)
+                ?? throw new UserNotFoundException(email); // ❌ User not found
+
+            // 🔹 Ensure the user has an address record
+            if (user.Address is null)
+                throw new AddressNotFoundException(user.Email!);
+
+            // 🔹 Map the UserAddress entity to an AddressDto and return it
+            return _mapper.Map<UserAddress, AddressDto>(user.Address);
+        }
+
+        /// <summary>
+        ///     Updates or creates the address record for the specified user.
+        /// </summary>
+        /// <param name="email">The user's email used to locate the user in the database.</param>
+        /// <param name="updateAddressDto">The new address data to be saved.</param>
+        /// <returns>
+        ///     An updated <see cref="AddressDto"/> reflecting the user's current address.
+        /// </returns>
+        /// <exception cref="UserNotFoundException">
+        ///     Thrown if no user exists with the specified email.
+        /// </exception>
+        public async Task<AddressDto> UpdateOrCreateCurrentUserAdressAsync(string email, AddressDto updateAddressDto)
+        {
+            // 🔹 Load the user and their current address
+            var user = await _userManager.Users
+                .Include(a => a.Address)
+                .FirstOrDefaultAsync(e => e.Email == email)
+                ?? throw new UserNotFoundException(email);
+
+            // 🔹 If user already has an address → update fields
+            if (user.Address is not null)
+            {
+                user.Address.City = updateAddressDto.City;
+                user.Address.Street = updateAddressDto.Street;
+                user.Address.Country = updateAddressDto.Country;
+                user.Address.LastName = updateAddressDto.LastName;
+                user.Address.FirstName = updateAddressDto.FirstName;
+            } else
+            {
+                // 🔹 Otherwise, create a new address record
+                user.Address = _mapper.Map<AddressDto, UserAddress>(updateAddressDto);
+            }
+
+            // 🔹 Persist the updated user and address to the database
+            await _userManager.UpdateAsync(user);
+
+            // 🔹 Return the updated address as a DTO
+            return _mapper.Map<UserAddress, AddressDto>(user.Address);
+        }
+
+        /// <summary>
+        ///     Retrieves the basic profile information of the currently authenticated user,
+        ///     including a fresh JWT token.
+        /// </summary>
+        /// <param name="email">The email address of the authenticated user.</param>
+        /// <returns>
+        ///     A <see cref="UserResponseDto"/> containing user details and a new authentication token.
+        /// </returns>
+        /// <exception cref="UserNotFoundException">
+        ///     Thrown if no user exists with the specified email.
+        /// </exception>
+        public async Task<UserResponseDto> GetCurrentUserAsync(string email)
+        {
+            // 🔹 Attempt to find the user by email
+            var user = await _userManager.FindByEmailAsync(email)
+                ?? throw new UserNotFoundException(email);
+
+            // 🔹 Return the basic user info + a freshly generated JWT token
+            return new UserResponseDto()
+            {
+                Email = user.Email!,
+                DisplayName = user.DisplayName,
+                Token = await CreateTokenAsync(user)
+            };
         }
 
         /// <summary>

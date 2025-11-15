@@ -5,8 +5,10 @@
       <w>appsettings</w>
       <w>congee</w>
       <w>creds</w>
+      <w>datetimeoffset</w>
       <w>dtos</w>
       <w>elganzory</w>
+      <w>uniqueidentifier</w>
     </words>
   </dictionary>
 </component>

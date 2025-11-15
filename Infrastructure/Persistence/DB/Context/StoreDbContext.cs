@@ -1,56 +1,110 @@
 using System.Reflection;
+using DomainLayer.Models.Order;
 using DomainLayer.Models.Product;
 using Microsoft.EntityFrameworkCore;
 
-namespace Persistence.DB;
+namespace Persistence.DB.Context;
 
 /// <summary>
-///     Represents the database context for the store application.
-///     This class is responsible for managing the connection to the database
-///     - DbContextOptions: Options for configuring the context, such as the database provider and connection string.
+///     Represents the main Entity Framework Core database context for the store application.
+/// <para>
+///     This class is responsible for:
+/// </para>
+/// <list type="bullet">
+///   <item><description>Managing the database connection.</description></item>
+///   <item><description>Defining DbSet properties that represent database tables.</description></item>
+///   <item><description>Applying entity configurations using the Fluent API.</description></item>
+/// </list>
+///
 /// <remarks>
-///     TODO: Install the required NuGet packages:
-///     <code>
-///         Microsoft.EntityFrameworkCore.SqlServer // For SQL Server database provider
-///         TODO Microsoft.EntityFrameworkCore.Tools // For Migrations
-///     </code>
+/// <b>NuGet Packages Required:</b>
+/// <code>
+///     Microsoft.EntityFrameworkCore.SqlServer   // SQL Server provider
+///     Microsoft.EntityFrameworkCore.Tools       // For migrations
+/// </code>
 ///
-///     TODO: First, Go To appsettings.json and add a connection string
-///     <code>
-///         builder.Services.AddDbContext `StoreDbContext (options =>
-///         {
-///             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-///         });
-///     </code>
+/// <b>Configuration Steps:</b>
+/// <para>1️⃣ Add your connection string in <c>appsettings.json</c>:</para>
+/// <code>
+///     "ConnectionStrings": {
+///         "DefaultConnection": "Server=localhost,1433;Database=E-Commerce;User id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;"
+///     }
+/// </code>
 ///
-///     TODO: Then, Go To Program.cs and configure the DbContext with the connection string
-///     <code>
-///         "ConnectionStrings": {
-///             "DefaultConnection": "Server= localhost, 1433; Database= E-Commerce; User Id= sa; Password= YourStrong@Passw0rd; TrustServerCertificate= True;"
-///         }
-///     </code>
+/// <para>2️⃣ Register the context in <c>Program.cs</c>:</para>
+/// <code>
+///     builder.Services.AddDbContext StoreDbContext (options =>
+///     {
+///         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+///     });
+/// </code>
+///
+/// <para>3️⃣ Any entity configuration class must implement:</para>
+/// <code>
+/// IEntityTypeConfiguration&lt;TEntity&gt;
+/// </code>
+/// EF Core will automatically apply these configurations via
+/// <c>ApplyConfigurationsFromAssembly</c>.
 /// </remarks>
 /// </summary>
-/// <param name="options">
-///     Options will be passed from Program.cs when configuring the services.
-///     This class uses Entity Framework Core to interact with the database.
-/// </param>
-public class StoreDbContext(DbContextOptions<StoreDbContext> options) : DbContext(options)
+public class StoreDbContext : DbContext
 {
-    // Configure the model using Fluent API
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="StoreDbContext"/> class.
+    /// </summary>
+    /// <param name="options">
+    ///     The options to be used by this <see cref="DbContext"/>,
+    ///     typically passed from dependency injection in <c>Program.cs</c>.
+    /// </param>
+    public StoreDbContext(DbContextOptions<StoreDbContext> options) : base(options)
+    {
+    }
+
+    /// <summary>
+    ///     Configures the model using Fluent API and applies all configurations
+    ///     defined in the current assembly.
+    /// </summary>
+    /// <param name="modelBuilder">The <see cref="ModelBuilder"/> used to configure entities.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Apply all entity configurations from the current assembly
-        // TODO Eny Entity Configuration Must Implement IEntityTypeConfiguration<TEntity> to be applied.
+        // Apply all IEntityTypeConfiguration<TEntity> classes from this assembly.
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        // Apply the base EF Core configurations
-        // TODO This is important to ensure that any configurations defined in the base DbContext are also applied.
+        // Apply base EF Core configurations.
         base.OnModelCreating(modelBuilder);
     }
 
-    // DbSets to represent tables in the database
+    // -----------------------------
+    // DbSet Properties (Tables)
+    // -----------------------------
+
+    /// <summary>
+    ///     Represents the collection of products in the store.
+    /// </summary>
     public DbSet<Product> Products { get; set; }
+
+    /// <summary>
+    ///     Represents the collection of product types (categories or classifications).
+    /// </summary>
     public DbSet<ProductType> ProductTypes { get; set; }
+
+    /// <summary>
+    ///     Represents the collection of product brands (e.g., Nike, Apple, etc.).
+    /// </summary>
     public DbSet<ProductBrand> ProductBrands { get; set; }
+
+    /// <summary>
+    ///     Represents the collection of orders placed by customers.
+    /// </summary>
+    public DbSet<Order> Orders { get; set; }
+
+    /// <summary>
+    ///     Represents the collection of order items associated with each order.
+    /// </summary>
+    public DbSet<OrderItems> OrderItems { get; set; }
+
+    /// <summary>
+    ///     Represents the collection of available delivery methods.
+    /// </summary>
+    public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
 }
