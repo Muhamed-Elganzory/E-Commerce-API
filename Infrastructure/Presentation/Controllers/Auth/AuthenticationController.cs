@@ -16,7 +16,7 @@ namespace Presentation.Controllers.Auth;
 /// </remarks>
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IServiceManager serviceManager) : BaseController
+public class AuthenticationController(IServiceManager serviceManager) : BaseController
 {
     /// <summary>
     ///     Provides access to all authentication-related application services.
@@ -34,7 +34,7 @@ public class AuthController(IServiceManager serviceManager) : BaseController
     /// </returns>
     /// <response code="200">Login successful — token and user info returned.</response>
     /// <response code="401">Invalid credentials — unauthorized access.</response>
-    [HttpPost("Login")] // Route => {{BaseURL}}/api/Auth/Login
+    [HttpPost("login")] // Route => {{BaseURL}}/api/Authentication/Login
     public async Task<ActionResult<UserResponseDto>> Login(LoginDto loginDto)
     {
         var user = await _serviceManager.AuthenticationService.LoginAsync(loginDto);

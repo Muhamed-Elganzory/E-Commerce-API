@@ -23,6 +23,11 @@ namespace E_Commerce
 
             #region Dependency Injection Services
 
+            // In ConfigureServices or during service registration
+            // ✅ Register the CORS service with the "AllowAngularLocalhost" policy
+            // This adds the CORS configuration to the DI container so it can be applied later in the pipeline
+            builder.Services.CorsServices();
+
             // ✅ Register Infrastructure services (e.g., repositories, DbContext)
             builder.Services.InfraStructureService(builder.Configuration);
 
@@ -45,6 +50,11 @@ namespace E_Commerce
             #endregion
 
             #region Custom Middleware
+
+            // In Program.cs or Startup.cs within the Middleware Pipeline
+            // ✅ Enable CORS using the policy named "AllowAngularLocalhost"
+            // This allows requests from http://localhost:4200 (Angular dev server) to access the API
+            app.UseCors("AllowAngularLocalhost");
 
             // ✅ Register custom middleware (Exception handling, Logging, etc.)
             app.CustomMiddleWareExtensions();

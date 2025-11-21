@@ -17,13 +17,13 @@ namespace E_Commerce.Extensions;
 
 /// <summary>
 ///     Provides extension methods for registering core application services,
-///     such as AutoMapper and the ServiceManager, into the dependency injection container.
+///     such as AutoMapper and the ServiceManagerWithLazyImplementation, into the dependency injection container.
 /// </summary>
 public static class CoreServicesExtensions
 {
     /// <summary>
     ///     Adds and configures core-level services used across the application.
-    ///     This includes AutoMapper for object mapping and the ServiceManager for business logic coordination.
+    ///     This includes AutoMapper for object mapping and the ServiceManagerWithLazyImplementation for business logic coordination.
     /// </summary>
     /// <param name="services">The service collection used for dependency injection.</param>
     /// <returns>The updated IServiceCollection instance for fluent chaining.</returns>
@@ -38,9 +38,9 @@ public static class CoreServicesExtensions
 
         // Service Manager Registration
         // 🔹 Service Manager With Lazy Implementation
-        // Registers IServiceManager and its concrete implementation ServiceManager.
-        // The ServiceManager acts as a central point to access all business services.
-        // services.AddScoped<IServiceManager, ServiceManager>();
+        // Registers IServiceManager and its concrete implementation ServiceManagerWithLazyImplementation.
+        // The ServiceManagerWithLazyImplementation acts as a central point to access all business services.
+        // services.AddScoped<IServiceManager, ServiceManagerWithLazyImplementation>();
 
         // ============================================================================
         //  SERVICE MANAGER REGISTRATION

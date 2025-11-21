@@ -26,7 +26,7 @@ namespace Service.Service
     ///         and improving application performance.
     ///     </para>
     /// </summary>
-    public class ServiceManager // : IServiceManager 🔹 To Implementation Go ServiceManagerWithDelegate
+    public class ServiceManagerWithLazyImplementation // : IServiceManager 🔹 To Implementation Go ServiceManagerWithDelegate
     {
         /// <summary>
         ///     Lazily initialized product service for managing product-related operations.
@@ -50,7 +50,7 @@ namespace Service.Service
         private readonly Lazy<IOrderService> _orderService;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ServiceManager"/> class.
+        ///     Initializes a new instance of the <see cref="ServiceManagerWithLazyImplementation"/> class.
         /// </summary>
         /// <param name="unitOfWork">
         ///     The Unit of Work instance responsible for coordinating repository operations
@@ -71,7 +71,7 @@ namespace Service.Service
         ///     The application configuration instance used to access environment settings,
         ///     app secrets, and JWT authentication parameters.
         /// </param>
-        public ServiceManager(
+        public ServiceManagerWithLazyImplementation(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IBasketRepository basketRepository,

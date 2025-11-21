@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Controllers.Attributes;
 using Presentation.Controllers.Shared;
 using Service.Spec.Product;
 using serviceAbstraction.Contracts.Product;
@@ -103,6 +104,10 @@ public class ProductsController(IServiceManager serviceManager) : BaseController
     /// </example>
     [HttpGet] // GET: /Products or /api/Products
     [Authorize] // => ServicesRegistration.AddJwtService => Allow service in program.cs
+    [Cash] // 🧮 Cash Attribute – Used to cache API responses for a specific duration
+           // // This attribute intercepts the action execution, checks if a cached value exists,
+           // // and returns it immediately. If not, it executes the action, stores the result in Redis,
+           // // and serves the cached response in future requests.
     // Task<ActionResult<IEnumerable<BrandDto>>> Before apply pagination ==> PaginatedResult<ProductDto>
     public async Task<ActionResult<PaginatedResult<ProductDto>>> GetAllProductsAsync([FromQuery] ProductQueryParams queryParams)
     {
