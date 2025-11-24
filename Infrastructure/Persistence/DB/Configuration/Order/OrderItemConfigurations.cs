@@ -21,7 +21,7 @@ namespace Persistence.DB.Configuration.Order
 
             // Configure Price property with decimal type and precision
             builder.Property(p => p.Price)
-                .HasColumnType("decimal(8,2)");
+                .HasColumnType("decimal(18,2)");
         }
     }
 }

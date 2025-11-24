@@ -36,10 +36,10 @@ public class MappingProfiles : Profile
         #region Product
 
         // Maps from Product entity to ProductDto.
-        // Also maps nested navigation properties for BrandName and TypeName.
+        // Also maps nested navigation properties for ProductBrand and ProductType.
         CreateMap<DomainLayer.Models.Product.Product, ProductDto>()
-            .ForMember(dest => dest.BrandName, opt => opt.MapFrom(src => src.ProductBrand.Name))
-            .ForMember(dest => dest.TypeName, opt => opt.MapFrom(src => src.ProductType.Name))
+            .ForMember(dest => dest.ProductBrand, opt => opt.MapFrom(src => src.ProductBrand.Name))
+            .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType.Name))
             // Maps PictureUrl using a custom value resolver.
             .ForMember(dest => dest.PictureUrl, opt => opt.MapFrom<ProductPictureUrlResolver>());
 
@@ -62,7 +62,7 @@ public class MappingProfiles : Profile
 
         #endregion
 
-        #region Auth
+        #region Auth - Identity
 
         // Configures two-way mapping between UserAddress (domain model)
         // and AddressDto (data transfer object).
@@ -84,7 +84,7 @@ public class MappingProfiles : Profile
         CreateMap<DomainLayer.Models.Order.Order, OrderToReturnDto>()
             .ForMember(dist => dist.DeliveryMethod,
                 opt => opt.MapFrom(src => src.DeliveryMethod.ShortName))
-            .ForMember(dist => dist.Total,
+            .ForMember(dist => dist.Total,// SubTotal + src.DeliveryCost
                 opt => opt.MapFrom(src => src.GetTotal()));
 
         // Maps from domain OrderItems entity to OrderItemsDto used in API responses.

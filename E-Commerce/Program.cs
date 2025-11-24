@@ -46,6 +46,7 @@ namespace E_Commerce
 
             // ✅ Build the web application
             var app = builder.Build();
+            app.UseDeveloperExceptionPage();
 
             #endregion
 

@@ -18,10 +18,16 @@ namespace Persistence.DB.Configuration.Order
             // Configure SubTotal property as required with decimal(8,2) type
             builder.Property(s => s.SubTotal)
                 .IsRequired()
-                .HasColumnType("decimal(8,2)");
+                .HasColumnType("decimal(18,2)");
+
+            builder.Property(o => o.DeliveryCost)
+                .HasColumnType("decimal(18,2)");
+
+            builder.Property(o => o.Total)
+                .HasColumnType("decimal(18,2)");
 
             // Configure relationship: Order has many OrderItems
-            builder.HasMany(o => o.OrderItems)
+            builder.HasMany(o => o.items)
                 .WithOne()  // Assuming OrderItems has navigation property back to Order, can specify here
                 .OnDelete(DeleteBehavior.Cascade);
 
@@ -31,7 +37,7 @@ namespace Persistence.DB.Configuration.Order
                 .HasForeignKey(o => o.DeliveryMethodId);
 
             // Configure owned type: ShippingAddress is owned by Order
-            builder.OwnsOne(o => o.ShippingAddress);
+            builder.OwnsOne(o => o.ShipToAddress);
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using serviceAbstraction.Contracts.Redis;
 
 namespace Presentation.Controllers.Attributes;
@@ -47,8 +48,14 @@ public class Cash(int durationInSecond = 90) : ActionFilterAttribute
                 StatusCode = StatusCodes.Status200OK
             };
 
+            ILogger<Cash> logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Cash>>();
+            logger.LogError("Cash");
+
             return;
         }
+
+        ILogger<Cash> _logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Cash>>();
+        _logger.LogError("Cash operation started");
 
         // 5️⃣ Execute the action if cache missed
         // ❗ explain line: next.Invoke() actually RUNS the controller action and returns its result

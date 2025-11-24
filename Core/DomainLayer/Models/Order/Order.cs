@@ -32,62 +32,73 @@ public class Order : BaseEntity<Guid>
     /// <param name="deliveryMethod">The delivery method chosen by the customer (Navigational Property).</param>
     /// <param name="orderItems">The collection of items included in the order (Navigational Property).</param>
     /// <param name="subTotal">The subtotal amount for the order before adding delivery cost.</param>
-    public Order(string userEmail, ShippingAddress shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItems> orderItems, decimal subTotal)
+    /// <param name="paymentIntentId"></param>
+    public Order(string userEmail, ShippingAddress shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItems> orderItems, decimal subTotal, string paymentIntentId)
     {
-        UserEmail = userEmail;
-        ShippingAddress = shippingAddress;
-        DeliveryMethod = deliveryMethod;
-        OrderItems = orderItems;
+        items = orderItems;
         SubTotal = subTotal;
+        BuyerEmail = userEmail;
+        DeliveryMethod = deliveryMethod;
+        ShipToAddress = shippingAddress;
+        PaymentIntentId = paymentIntentId;
+        Status = nameof(OrderStatus.Pending);
     }
 
     /// <summary>
-    ///     Gets or sets the email of the user who placed the order.
-    ///     <para>Scalar property (simple data type).</para>
+    ///     Email of the customer who placed the order.
     /// </summary>
-    public string UserEmail { get; set; } = null!;
+    public string BuyerEmail { get; set; } = null!; // => UserEmail
 
     /// <summary>
-    ///     Gets or sets the date and time when the order was placed, including offset from UTC.
-    ///     <para>Scalar property.</para>
+    ///     Shipping address associated with this order.
     /// </summary>
-    public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
+    public ShippingAddress ShipToAddress { get; set; } = null!; // => ShippingAddress
 
     /// <summary>
-    ///     Gets or sets the current status of the order.
-    ///     <para>Scalar property.</para>
+    ///     Collection of items included in the order.
     /// </summary>
-    public OrderStatus OrderStatus { get; set; }
+    public ICollection<OrderItems> items { get; set; } = new List<OrderItems>(); // => OrderItems
 
     /// <summary>
-    ///     Gets or sets the shipping address where the order will be delivered.
-    ///     <para><b>Navigational Property:</b> links to the ShippingAddress entity.</para>
+    ///     Current status of the order as a string
+    ///     (e.g., "Pending", "PaymentReceived").
     /// </summary>
-    public ShippingAddress ShippingAddress { get; set; } = null!;
+    public string Status { get; set; } = null!; // Enum mapped to string // => OrderStatus
 
     /// <summary>
-    ///     Gets or sets the delivery method chosen for the order.
-    ///     <para><b>Navigational Property:</b> links to the DeliveryMethod entity.</para>
+    ///     Name of the selected delivery method.
     /// </summary>
     public DeliveryMethod DeliveryMethod { get; set; } = null!;
 
     /// <summary>
-    ///     Gets or sets the foreign key for the delivery method.
-    ///     <para>Scalar property representing the foreign key.</para>
+    ///     ID of the delivery method chosen for this order.
     /// </summary>
     public int DeliveryMethodId { get; set; }
 
     /// <summary>
-    ///     Gets or sets the collection of order items included in this order.
-    ///     <para><b>Navigational Property:</b> one-to-many relationship to OrderItems entities.</para>
+    ///     Cost of delivery associated with this order.
     /// </summary>
-    public ICollection<OrderItems> OrderItems { get; set; } = new List<OrderItems>();
+    public decimal DeliveryCost { get; set; }
 
     /// <summary>
-    ///     Gets or sets the subtotal amount for the order before delivery costs.
-    ///     <para>Scalar property.</para>
+    ///     Order subtotal before applying delivery cost.
     /// </summary>
     public decimal SubTotal { get; set; }
+
+    /// <summary>
+    ///     Date and time when the order was placed (with timezone offset).
+    /// </summary>
+    public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
+
+    /// <summary>
+    ///     Stripe payment intent identifier used to track payment status.
+    /// </summary>
+    public string PaymentIntentId { get; set; } = null!;
+
+    /// <summary>
+    ///     Total cost of the order, including delivery.
+    /// </summary>
+    public decimal Total { get; set; }
 
     /// <summary>
     ///     Calculates the total order amount including the delivery cost.

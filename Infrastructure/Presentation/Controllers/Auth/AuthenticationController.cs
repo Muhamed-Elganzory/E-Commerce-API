@@ -34,7 +34,7 @@ public class AuthenticationController(IServiceManager serviceManager) : BaseCont
     /// </returns>
     /// <response code="200">Login successful — token and user info returned.</response>
     /// <response code="401">Invalid credentials — unauthorized access.</response>
-    [HttpPost("login")] // Route => {{BaseURL}}/api/Authentication/Login
+    [HttpPost("login")] // Route => {{BaseURL}}/api/Authentication/login
     public async Task<ActionResult<UserResponseDto>> Login(LoginDto loginDto)
     {
         var user = await _serviceManager.AuthenticationService.LoginAsync(loginDto);
@@ -52,7 +52,7 @@ public class AuthenticationController(IServiceManager serviceManager) : BaseCont
     /// </returns>
     /// <response code="200">Registration successful.</response>
     /// <response code="400">Validation failed — bad request (e.g., weak password, email in use).</response>
-    [HttpPost("Register")] // Route => {{BaseURL}}/api/Auth/Register
+    [HttpPost("register")] // Route => {{BaseURL}}/api/Authentication/register
     public async Task<ActionResult<UserResponseDto>> Register(RegisterDto registerDto)
     {
         var user = await _serviceManager.AuthenticationService.RegisterAsync(registerDto);
@@ -68,7 +68,7 @@ public class AuthenticationController(IServiceManager serviceManager) : BaseCont
     /// <returns>
     ///     Returns <c>true</c> if the email is already registered; otherwise, <c>false</c>.
     /// </returns>
-    [HttpGet("CheckEmail")] // Route => {{BaseURL}}/api/Auth/CheckEmail
+    [HttpGet("emailExists")] // Route => {{BaseURL}}/api/Authentication/emailExists
     public async Task<ActionResult<bool>> CheckEmail(string email)
     {
         var result = await _serviceManager.AuthenticationService.CheckEmailAsync(email);
@@ -112,7 +112,7 @@ public class AuthenticationController(IServiceManager serviceManager) : BaseCont
     /// <response code="200">Address successfully retrieved.</response>
     /// <response code="401">Unauthorized — missing or invalid token.</response>
     [Authorize]
-    [HttpGet("GetAddress")] // Route => {{BaseURL}}/api/Auth/GetAddress
+    [HttpGet("address")] // Route => {{BaseURL}}/api/Auth/address => (GetAddress)
     public async Task<ActionResult<AddressDto>> GetCurrentUserAddress ()
     {
         // Auth Type => Bearer Token [TOKEN]

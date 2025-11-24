@@ -25,7 +25,7 @@ public class ProductCountSpecification(ProductQueryParams queryParams)
         (!queryParams.TypeId.HasValue || p.ProductTypeId == queryParams.TypeId) &&
 
         // Filter by name if SearchValue is provided (case-insensitive)
-        (string.IsNullOrWhiteSpace(queryParams.SearchValue) ||
-         p.Name.ToLower().Contains(queryParams.SearchValue.ToLower())))
+        (string.IsNullOrWhiteSpace(queryParams.Search) ||
+         p.Name.ToLower().Contains(queryParams.Search.ToLower())))
 {
 }

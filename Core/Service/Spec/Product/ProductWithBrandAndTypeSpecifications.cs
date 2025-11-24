@@ -68,35 +68,35 @@ public class ProductWithBrandAndTypeBaseSpecifications : BaseSpecification<Domai
         : base(p =>
             (!queryParams.BrandId.HasValue || p.ProductBrandId == queryParams.BrandId) &&
             (!queryParams.TypeId.HasValue || p.ProductTypeId == queryParams.TypeId) &&
-            (string.IsNullOrWhiteSpace(queryParams.SearchValue) || p.Name.ToLower().Contains(queryParams.SearchValue.ToLower())))
+            (string.IsNullOrWhiteSpace(queryParams.Search) || p.Name.ToLower().Contains(queryParams.Search.ToLower())))
     {
         AddInclude(p => p.ProductBrand);
         AddInclude(p => p.ProductType);
 
-        switch (queryParams.SortingOptions)
+        switch (queryParams.sort)
         {
-            case ProductSortingOptions.NameAscending:
+            case ProductSortingOptions.nameAsc:
                 AddOrderByAscending(p => p.Name);
                 break;
 
-            case ProductSortingOptions.NameDescending:
+            case ProductSortingOptions.nameDesc:
                 AddOrderByDescending(p => p.Name);
                 break;
 
-            case ProductSortingOptions.PriceAscending:
+            case ProductSortingOptions.priceAsc:
                 AddOrderByAscending(p => p.Price);
                 break;
 
-            case ProductSortingOptions.PriceDescending:
+            case ProductSortingOptions.priceDesc:
                 AddOrderByDescending(p => p.Price);
                 break;
 
             default:
-                throw new ArgumentOutOfRangeException(nameof(queryParams.SortingOptions), queryParams.SortingOptions, null);
+                throw new ArgumentOutOfRangeException(nameof(queryParams.sort), queryParams.sort, null);
         }
 
         // Apply pagination settings based on the provided query parameters (page size and page index)
-        ApplyPagination(queryParams.PageSize, queryParams.PageIndex);
+        ApplyPagination(queryParams.PageSize, queryParams.PageNumber);
     }
 
     /// <summary>

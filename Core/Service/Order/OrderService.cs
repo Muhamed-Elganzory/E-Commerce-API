@@ -2,10 +2,10 @@ using AutoMapper;
 using DomainLayer.Contracts.Repository.Basket;
 using DomainLayer.Contracts.Unit;
 using DomainLayer.Exceptions.Basket;
-using DomainLayer.Exceptions.NotFound;
+using DomainLayer.Models.Order;
 using DomainLayer.Exceptions.Order;
 using DomainLayer.Exceptions.Product;
-using DomainLayer.Models.Order;
+using OrderClass = DomainLayer.Models.Order.Order;
 using Service.Spec.Order;
 using serviceAbstraction.Contracts.Order;
 using Shared.DTO.Order;
@@ -56,11 +56,10 @@ namespace Service.Order
         public async Task<OrderToReturnDto> CreateOrderAsync(OrderDto orderDto, string email)
         {
             // Map Shipping Address DTO to Domain Model
-            var orderAddress = _mapper.Map<ShippingAddressDto, ShippingAddress>(orderDto.ShippingAddress);
+            var orderAddress = _mapper.Map<ShippingAddressDto, ShippingAddress>(orderDto.ShipToAddress);
 
             // Retrieve the basket by ID or throw if not found
-            var basket = await _basketRepository.GetBasketAsync(orderDto.BasketId)
-                         ?? throw new BasketNotFoundException(orderDto.BasketId);
+            var basket = await _basketRepository.GetBasketAsync(orderDto.BasketId) ?? throw new BasketNotFoundException(orderDto.BasketId);
 
             // Prepare list to hold order items
             var orderItems = new List<OrderItems>();
@@ -69,10 +68,9 @@ namespace Service.Order
             var productRepo = await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Product.Product, int>();
 
             // For each basket item, validate and create order items
-            foreach (var item in basket.BasketItems)
+            foreach (var item in basket.items)
             {
-                var product = await productRepo.GetByIdAsync(item.Id)
-                              ?? throw new ProductNotFoundException(item.Id);
+                var product = await productRepo.GetByIdAsync(item.Id) ?? throw new ProductNotFoundException(item.Id);
 
                 var orderItem = new OrderItems
                 {
@@ -91,22 +89,27 @@ namespace Service.Order
 
             // Retrieve and validate the delivery method
             var deliveryMethodRepo = await _unitOfWork.CreateRepositoryAsync<DeliveryMethod, int>();
-            var deliveryMethod = await deliveryMethodRepo.GetByIdAsync(orderDto.DeliveryMethodId)
-                                 ?? throw new DeliveryMethodNotFoundException(orderDto.DeliveryMethodId);
+            var deliveryMethod = await deliveryMethodRepo.GetByIdAsync(orderDto.DeliveryMethodId) ?? throw new DeliveryMethodNotFoundException(orderDto.DeliveryMethodId);
 
             // Calculate subtotal = sum of (quantity * price)
             var subTotal = orderItems.Sum(oi => oi.Quantity * oi.Price);
 
-            // Create the Order aggregate root
-            var order = new DomainLayer.Models.Order.Order(email, orderAddress, deliveryMethod, orderItems, subTotal);
+            if (basket.PaymentIntentId != null)
+            {
+                // Create the Order aggregate root
+                var order = new OrderClass(email, orderAddress, deliveryMethod, orderItems, subTotal, basket.PaymentIntentId);
 
-            // Add the new order to the repository and save changes
-            var orderRepo = await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Order.Order, Guid>();
-            await orderRepo.CreateAsync(order);
-            await _unitOfWork.SaveChangesAsync();
 
-            // Map the created order domain model to DTO and return
-            return _mapper.Map<DomainLayer.Models.Order.Order, OrderToReturnDto>(order);
+                // Add the new order to the repository and save changes
+                var orderRepo = await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Order.Order, Guid>();
+                await orderRepo.CreateAsync(order);
+                await _unitOfWork.SaveChangesAsync();
+
+                // Map the created order domain model to DTO and return
+                return _mapper.Map<DomainLayer.Models.Order.Order, OrderToReturnDto>(order);
+            }
+
+            throw new InvalidOperationException("Cannot create order because payment intent is missing.");
         }
 
         /// <summary>

@@ -10,7 +10,7 @@ namespace DomainLayer.Models.Product;
 ///         - Product has one ProductType
 /// </remarks>
 /// </summary>
-public class Product: BaseEntity<int>
+public class Product : BaseEntity<int>
 {
     public string Name { get; set; } = null!;
 

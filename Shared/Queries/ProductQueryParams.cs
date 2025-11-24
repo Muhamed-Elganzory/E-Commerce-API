@@ -40,9 +40,9 @@ public class ProductQueryParams
     /// <summary>
     ///     Determines how the results should be sorted.
     ///     Uses the <see cref="ProductSortingOptions"/> enum (e.g., NameAscending, PriceDescending).
-    ///     Defaults to <see cref="ProductSortingOptions.NameAscending"/> if not specified.
+    ///     Defaults to <see cref="ProductSortingOptions.nameAsc"/> if not specified.
     /// </summary>
-    public ProductSortingOptions SortingOptions { get; set; } = ProductSortingOptions.NameAscending;
+    public ProductSortingOptions sort { get; set; } = ProductSortingOptions.nameAsc; // => SortingOptions
 
     /// <summary>
     ///     (Optional) A free-text search keyword used to filter products by name or description.
@@ -61,7 +61,7 @@ public class ProductQueryParams
     ///         GET /api/Products?searchValue=shoe
     ///     </code>
     /// </example>
-    public string? SearchValue { get; set; }
+    public string? Search { get; set; } // => SearchValue
 
     /// <summary>
     ///     The default number of items to display per page.
@@ -76,7 +76,7 @@ public class ProductQueryParams
     /// <summary>
     ///     The current page index (starts from 1).
     /// </summary>
-    public int PageIndex { get; set; } = 1;
+    public int PageNumber { get; set; } = 1; // => PageIndex
 
     /// <summary>
     ///     The backing field for the <see cref="PageSize"/> property.

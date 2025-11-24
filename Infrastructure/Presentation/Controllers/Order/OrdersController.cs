@@ -18,7 +18,7 @@ namespace Presentation.Controllers.Order
     ///     - Inherits from <see cref="BaseController"/> for shared routing and helper utilities.
     /// </remarks>
     [Authorize]
-    public class OrderController : BaseController
+    public class OrdersController : BaseController
     {
         /// <summary>
         ///     Provides access to business logic services such as orders, products, and baskets.
@@ -26,11 +26,11 @@ namespace Presentation.Controllers.Order
         private readonly IServiceManager _serviceManager;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="OrderController"/> class,
+        ///     Initializes a new instance of the <see cref="OrdersController"/> class,
         ///     injecting the service manager that provides access to business services.
         /// </summary>
         /// <param name="serviceManager">The application's service manager.</param>
-        public OrderController(IServiceManager serviceManager)
+        public OrdersController(IServiceManager serviceManager)
         {
             _serviceManager = serviceManager;
         }
@@ -47,7 +47,7 @@ namespace Presentation.Controllers.Order
         /// <response code="200">Order created successfully.</response>
         /// <response code="400">Returned if email claim is missing.</response>
         /// <response code="401">Returned if user is not authenticated.</response>
-        [HttpPost("CreateOrder")]
+        [HttpPost]
         public async Task<ActionResult<OrderToReturnDto>> CreateOrder(OrderDto orderDto)
         {
             // Extract authenticated user email from JWT token

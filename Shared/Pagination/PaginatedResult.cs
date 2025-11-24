@@ -9,22 +9,22 @@ namespace Shared.Pagination
         /// <summary>
         ///     Gets or sets the current page index (starting from 1).
         /// </summary>
-        public int PageIndex { get; set; }
+        public int pageIndex { get; set; } // => PageIndex
 
         /// <summary>
         ///     Gets or sets the number of items displayed per page.
         /// </summary>
-        public int PageSize { get; set; }
+        public int pageSize { get; set; } // => PageSize
 
         /// <summary>
         ///     Gets or sets the total number of pages available for the given dataset.
         /// </summary>
-        public int TotalCount { get; set; }
+        public int count { get; set; } // => Count
 
         /// <summary>
         ///     Gets or sets the collection of items contained in the current page.
         /// </summary>
-        public IEnumerable<TEntity> Data { get; set; }
+        public IEnumerable<TEntity> data { get; set; } // => Data
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="PaginatedResult{TEntity}"/> class
@@ -36,10 +36,10 @@ namespace Shared.Pagination
         /// <param name="data">The collection of items in the current page.</param>
         public PaginatedResult(int pageSize, int pageIndex, int totalCount, IEnumerable<TEntity> data)
         {
-            PageSize = pageSize;
-            PageIndex = pageIndex;
-            TotalCount = totalCount;
-            Data = data;
+            this.pageSize = pageSize;
+            this.pageIndex = pageIndex;
+            count = totalCount;
+            this.data = data;
         }
     }
 }

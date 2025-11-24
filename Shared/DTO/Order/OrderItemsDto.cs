@@ -3,7 +3,7 @@ namespace Shared.DTO.Order
     /// <summary>
     ///     Represents a single item in an order to be returned to the client.
     /// </summary>
-    public class OrderItemsDto
+    public record OrderItemsDto
     {
         public int ProductId { get; set; }
         /// <summary>

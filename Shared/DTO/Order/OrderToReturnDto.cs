@@ -1,52 +1,68 @@
 namespace Shared.DTO.Order
 {
     /// <summary>
-    ///     Represents the details of an order to be returned to the client.
+    ///     Represents the details of an order returned to the client.
     /// </summary>
-    public class OrderToReturnDto
+    public record OrderToReturnDto
     {
         /// <summary>
-        ///     Gets or sets the unique identifier of the order.
+        ///     Unique identifier of the order.
         /// </summary>
         public Guid Id { get; set; }
 
         /// <summary>
-        ///     Gets or sets the email of the user who placed the order.
+        ///     Email of the customer who placed the order.
         /// </summary>
-        public string UserEmail { get; set; } = null!;
+        public string BuyerEmail { get; set; } = null!; // => UserEmail
 
         /// <summary>
-        ///     Gets or sets the date and time when the order was placed, including timezone offset.
+        ///     Shipping address associated with this order.
         /// </summary>
-        public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
+        public ShippingAddressDto ShipToAddress { get; set; } = null!; // => ShippingAddress
 
         /// <summary>
-        ///     Gets or sets the status of the order as a string (e.g., "Pending", "PaymentReceived").
+        ///     Collection of items included in the order.
         /// </summary>
-        public string OrderStatus { get; set; } = null!; // Enum as string for easier client use
+        public ICollection<OrderItemsDto> items { get; set; } = new List<OrderItemsDto>(); // => OrderItems
 
         /// <summary>
-        ///     Gets or sets the shipping address information.
+        ///     Current status of the order as a string
+        ///     (e.g., "Pending", "PaymentReceived").
         /// </summary>
-        public ShippingAddressDto ShippingAddress { get; set; } = null!;
+        public string Status { get; set; } = null!; // Enum mapped to string // => OrderStatus
 
         /// <summary>
-        ///     Gets or sets the delivery method name selected for this order.
+        ///     Name of the selected delivery method.
         /// </summary>
         public string DeliveryMethod { get; set; } = null!;
 
         /// <summary>
-        ///     Gets or sets the collection of order items included in this order.
+        ///     ID of the delivery method chosen for this order.
         /// </summary>
-        public ICollection<OrderItemsDto> OrderItems { get; set; } = new List<OrderItemsDto>();
+        public int DeliveryMethodId { get; set; }
 
         /// <summary>
-        ///     Gets or sets the subtotal amount before adding delivery cost.
+        ///     Cost of delivery associated with this order.
+        /// </summary>
+        public decimal DeliveryCost { get; set; }
+
+        /// <summary>
+        ///     Order subtotal before applying delivery cost.
         /// </summary>
         public decimal SubTotal { get; set; }
 
         /// <summary>
-        ///     Gets or sets the total amount for the order, including delivery cost.
+        ///     Date and time when the order was placed (with timezone offset).
+        /// </summary>
+        public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
+
+        /// <summary>
+        ///     Stripe payment intent identifier used to track payment status.
+        /// </summary>
+        public string PaymentIntentId { get; set; } = null!;
+
+        /// <summary>
+        ///     Total cost of the order, including delivery.
         /// </summary>
         public decimal Total { get; set; }
     }

@@ -18,7 +18,7 @@ public class DeliveryMethodConfigurations : IEntityTypeConfiguration<DeliveryMet
     {
         builder.Property(c => c.Cost)
             .IsRequired()
-            .HasColumnType("decimal(8,2)");
+            .HasColumnType("decimal(18,2)");
 
         builder.Property(n => n.ShortName)
             .IsRequired()

@@ -3,7 +3,7 @@ namespace Shared.DTO.Order
     /// <summary>
     ///     Represents the data required to create a new order.
     /// </summary>
-    public class OrderDto
+    public record OrderDto
     {
         /// <summary>
         ///     Gets or sets the identifier of the basket/cart containing the items to order.
@@ -18,6 +18,6 @@ namespace Shared.DTO.Order
         /// <summary>
         ///     Gets or sets the shipping address details for the order.
         /// </summary>
-        public ShippingAddressDto ShippingAddress { get; set; } = null!;
+        public ShippingAddressDto ShipToAddress { get; set; } = null!; // => ShippingAddress
     }
 }

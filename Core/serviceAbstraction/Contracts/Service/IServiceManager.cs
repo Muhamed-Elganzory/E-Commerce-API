@@ -1,6 +1,7 @@
 using ServiceAbstraction.Contracts.Auth;
 using serviceAbstraction.Contracts.Basket;
 using serviceAbstraction.Contracts.Order;
+using serviceAbstraction.Contracts.Payment;
 using serviceAbstraction.Contracts.Product;
 
 namespace serviceAbstraction.Contracts.Service
@@ -51,5 +52,11 @@ namespace serviceAbstraction.Contracts.Service
         ///     </para>
         /// </summary>
         public IOrderService OrderService { get; }
+
+        /// <summary>
+        ///     Gets the <see cref="IPaymentService"/> instance.
+        ///     This property is typically initialized through constructor injection or factory delegate.
+        /// </summary>
+        public IPaymentService PaymentService { get; }
     }
 }

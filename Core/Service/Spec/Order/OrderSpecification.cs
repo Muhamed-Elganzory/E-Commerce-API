@@ -18,18 +18,18 @@ namespace Service.Spec.Order
         ///     Includes related entities: OrderItems, DeliveryMethod, ShippingAddress.
         ///     Orders results by OrderDate descending (most recent orders first).
         /// </remarks>
-        public OrderSpecification(string email) : base(e => e.UserEmail == email)
+        public OrderSpecification(string email) : base(e => e.BuyerEmail == email)
         {
             // Include the collection of order items related to the order
-            AddInclude(i => i.OrderItems);
+            AddInclude(i => i.items);
 
             // Include the delivery method associated with the order
             AddInclude(d => d.DeliveryMethod);
 
             // Include the shipping address for the order
-            AddInclude(a => a.ShippingAddress);
+            AddInclude(a => a.ShipToAddress);
 
-            // Sort orders by order date in descending order (newest first)
+            // sort orders by order date in descending order (newest first)
             AddOrderByDescending(d => d.OrderDate);
         }
 
@@ -44,13 +44,13 @@ namespace Service.Spec.Order
         public OrderSpecification(Guid orderId) : base(o => o.Id == orderId)
         {
             // Include the collection of order items related to the order
-            AddInclude(i => i.OrderItems);
+            AddInclude(i => i.items);
 
             // Include the delivery method associated with the order
             AddInclude(d => d.DeliveryMethod);
 
             // Include the shipping address for the order
-            AddInclude(a => a.ShippingAddress);
+            AddInclude(a => a.ShipToAddress);
         }
     }
 }

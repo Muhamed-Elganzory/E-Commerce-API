@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Shared.DTO.Basket;
 
 /// <summary>
@@ -24,10 +26,12 @@ public class BasketItemDto
     /// <summary>
     ///     The price of a single unit of the product.
     /// </summary>
+    [Range(1, double.MaxValue)]
     public decimal Price { get; set; }
 
     /// <summary>
     ///     The quantity of this product added to the basket.
     /// </summary>
+    [Range(1, 99)]
     public int Quantity { get; set; }
 }

@@ -31,7 +31,7 @@ namespace Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Cost")
-                        .HasColumnType("decimal(8,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("DeliveryTime")
                         .IsRequired()
@@ -59,21 +59,32 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("BuyerEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DeliveryCost")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("DeliveryMethodId")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("OrderDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(8,2)");
-
-                    b.Property<string>("UserEmail")
+                    b.Property<string>("PaymentIntentId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -94,7 +105,7 @@ namespace Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(8,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -190,7 +201,7 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("DomainLayer.Models.Order.ShippingAddress", "ShippingAddress", b1 =>
+                    b.OwnsOne("DomainLayer.Models.Order.ShippingAddress", "ShipToAddress", b1 =>
                         {
                             b1.Property<Guid>("OrderId")
                                 .HasColumnType("uniqueidentifier");
@@ -225,14 +236,14 @@ namespace Persistence.Migrations
 
                     b.Navigation("DeliveryMethod");
 
-                    b.Navigation("ShippingAddress")
+                    b.Navigation("ShipToAddress")
                         .IsRequired();
                 });
 
             modelBuilder.Entity("DomainLayer.Models.Order.OrderItems", b =>
                 {
                     b.HasOne("DomainLayer.Models.Order.Order", null)
-                        .WithMany("OrderItems")
+                        .WithMany("items")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -284,7 +295,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("DomainLayer.Models.Order.Order", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("items");
                 });
 #pragma warning restore 612, 618
         }

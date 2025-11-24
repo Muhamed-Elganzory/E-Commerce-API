@@ -116,7 +116,7 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
         // Return paginated result
         return new PaginatedResult<ProductDto>(
             productsCount,     // ✅ Page size (items per page)
-            queryParams.PageIndex,     // ✅ Current page index
+            queryParams.PageNumber,     // ✅ Current page index
             totalCount,                // ✅ Total number of items
             productsData               // ✅ The current page data
         );

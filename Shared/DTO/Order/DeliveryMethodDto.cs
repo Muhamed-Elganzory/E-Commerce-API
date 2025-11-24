@@ -4,7 +4,7 @@ namespace Shared.DTO.Order
     ///     Represents a delivery method returned to the client,
     ///     including cost and descriptive details.
     /// </summary>
-    public class DeliveryMethodDto
+    public record DeliveryMethodDto
     {
         /// <summary>
         ///     Unique identifier of the delivery method.
@@ -23,9 +23,10 @@ namespace Shared.DTO.Order
         public string Description { get; set; } = null!;
 
         /// <summary>
-        ///     The name of the carrier or delivery service provider.
+        ///     Estimated delivery time displayed to the user
+        ///     (e.g., "2-3 business days", "Next day delivery").
         /// </summary>
-        public string DeliveryMethod { get; set; } = null!;
+        public string DeliveryTime { get; set; } = null!;
 
         /// <summary>
         ///     Delivery cost associated with this method.

@@ -17,5 +17,27 @@ public class CustomerBasketDto
     ///     A collection of items that the customer has added to their basket.
     ///     Each item includes details such as product ID, name, price, quantity, etc.
     /// </summary>
-    public ICollection<BasketItemDto> BasketItems { get; set; } = [];
+    public ICollection<BasketItemDto> items { get; set; } = new List<BasketItemDto>();
+
+    /// <summary>
+    ///     The payment intent identifier returned by the payment provider (e.g., Stripe).
+    ///     Used for managing and updating the payment session.
+    /// </summary>
+    public string? PaymentIntentId { get; set; }
+
+    /// <summary>
+    ///     The client secret associated with the payment intent.
+    ///     Required by the client to complete the payment process.
+    /// </summary>
+    public string? ClientSecret { get; set; }
+
+    /// <summary>
+    ///     The shipping price for the selected delivery method.
+    /// </summary>
+    public decimal? ShippingPrice { get; set; } // DeliveryMethod.Price
+
+    /// <summary>
+    ///     The ID of the selected delivery method.
+    /// </summary>
+    public int? DeliveryMethodId { get; set; }
 }

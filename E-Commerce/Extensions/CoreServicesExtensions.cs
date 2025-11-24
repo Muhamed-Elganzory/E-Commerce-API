@@ -5,11 +5,13 @@ using Service.Images.Order;
 using Service.Images.Product;
 using Service.Mapping;
 using Service.Order;
+using Service.Payment;
 using Service.Product;
 using Service.Service;
 using ServiceAbstraction.Contracts.Auth;
 using serviceAbstraction.Contracts.Basket;
 using serviceAbstraction.Contracts.Order;
+using serviceAbstraction.Contracts.Payment;
 using serviceAbstraction.Contracts.Product;
 using serviceAbstraction.Contracts.Service;
 
@@ -93,6 +95,16 @@ public static class CoreServicesExtensions
         // Factory delegate
         services.AddScoped<Func<IAuthenticationService>>(
             provider => provider.GetRequiredService<IAuthenticationService>
+        );
+
+        // ============================================================================
+        //  PAYMENT SERVICE REGISTRATION
+        // ============================================================================
+        services.AddScoped<IPaymentService, PaymentService>();
+
+        // Factory delegate
+        services.AddScoped<Func<IPaymentService>>(
+            provider => provider.GetRequiredService<IPaymentService>
         );
 
         #endregion
