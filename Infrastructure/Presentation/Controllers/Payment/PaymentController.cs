@@ -40,4 +40,37 @@ public class PaymentController (IServiceManager serviceManager) : BaseController
         // Return HTTP 200 OK with the updated basket information
         return Ok(basket);
     }
+
+    /// <summary>
+    ///     Receives Stripe webhook events sent to the API.
+    /// </summary>
+    /// <remarks>
+    ///     This endpoint is called directly by Stripe (not from the frontend).
+    ///     It reads the raw JSON body and the Stripe-Signature header,
+    ///     then passes them to the payment service to validate the event
+    ///     and update the order payment status.
+    /// </remarks>
+    /// <returns>An empty response indicating the webhook was processed.</returns>
+    [HttpPost("webhooks")]
+    public async Task<IActionResult> Webhook()
+    {
+        // StreamReader(HttpContext.Request.Body):
+        //     Reads the raw request body (JSON sent by Stripe).
+        //
+        // ReadToEndAsync():
+        //     Reads the entire body as a string asynchronously.
+        var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+
+        // Stripe-Signature:
+        //     A special header sent by Stripe used to verify
+        //     that the webhook is coming from Stripe and not anyone else.
+        await _serviceManager.PaymentService.UpdateOrderPaymentStatus(
+            json,
+            Request.Headers["Stripe-Signature"]!
+        );
+
+        // Return an empty 200 OK response.
+        // Stripe only needs to know that we received the event.
+        return new EmptyResult();
+    }
 }

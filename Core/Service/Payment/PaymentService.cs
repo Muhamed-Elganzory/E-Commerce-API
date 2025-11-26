@@ -13,6 +13,7 @@ using Shared.DTO.Basket;
 using Stripe;
 // TODO: Alias Name
 using ProductClass = DomainLayer.Models.Product.Product;
+using OrderClass = DomainLayer.Models.Order.Order;
 
 namespace Service.Payment;
 
@@ -77,7 +78,7 @@ public class PaymentService(IConfiguration configuration, IBasketRepository bask
             var orderSpec = new OrderPaymentIntentSpecifications(basket.PaymentIntentId);
 
             // Use specification to find existing order with this PaymentIntentId
-            var existOrder = await orderRepo.GetByIdAsync(orderSpec);
+            var existOrder = await orderRepo.GetByIdWithSpecificationAsync(orderSpec);
 
             // If an order with this PaymentIntentId already exists (possible duplicate)
             if (existOrder is not null)
@@ -162,5 +163,96 @@ public class PaymentService(IConfiguration configuration, IBasketRepository bask
         // 8) Map the basket domain model to a DTO and return it to the client
         // This DTO includes the PaymentIntentId and ClientSecret for completing payment
         return _mapper.Map<CustomerBasket, CustomerBasketDto>(basket);
+    }
+
+    /// <summary>
+    ///     For WebHooks
+    ///     Handles data received from Stripe webhooks to update order payment status.
+    /// </summary>
+    /// <param name="request">Raw JSON payload sent by Stripe webhook.</param>
+    /// <param name="stripeHeader">Stripe signature header for verifying webhook authenticity.</param>
+    /// <returns>Task representing the async operation.</returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task UpdateOrderPaymentStatus (string request, string stripeHeader)
+    {
+        // 1) Retrieve Stripe webhook secret key from configuration for verification
+        var webHookSecret = _configuration["StripeSettings:WebHookSecretKey"];
+
+        // 2) Use Stripe's utility to construct and verify the event from the payload, header, and secret
+        // EventUtility verifies the signature and parses the event data
+        var stripeEvent = EventUtility.ConstructEvent(request, stripeHeader, webHookSecret);
+
+        // Extract the PaymentIntent object from the event data (if present)
+        var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+
+        // Handle different Stripe event types relevant to payment status
+        switch (stripeEvent.Type)
+        {
+            case "payment_intent.payment_failed":
+                // When payment fails, update order status accordingly
+                if (paymentIntent != null) await UpdatePaymentFailed(paymentIntent.PaymentMethodId);
+                break;
+
+            case "payment_intent.succeeded":
+                // When payment succeeds, update order status accordingly
+                if (paymentIntent != null) await UpdatePaymentReceived(paymentIntent.PaymentMethodId);
+                break;
+
+            default:
+                Console.WriteLine("Unhandled event type" + stripeEvent.Type);
+                break;
+        }
+    }
+
+    /// <summary>
+    ///     Updates the order status to PaymentFailed based on payment intent ID.
+    /// </summary>
+    /// <param name="paymentIntentId">The Stripe payment intent ID.</param>
+    /// <exception cref="Exception">Thrown if order is not found for the given payment intent ID.</exception>
+    private async Task UpdatePaymentFailed(string paymentIntentId)
+    {
+        // Create repository for Order entity
+        var orderRepo = await _unitOfWork.CreateRepositoryAsync<OrderClass, Guid>();
+
+        // Retrieve order by payment intent specification or throw if not found
+        var paymentIntent = await orderRepo.GetByIdWithSpecificationAsync(new OrderPaymentIntentSpecifications(paymentIntentId)) ?? throw new Exception("Order not found for payment intent.");
+
+        // Update order status to PaymentFailed
+        paymentIntent.Status = OrderStatus.PaymentFailed;
+
+        // Get repository instance to update the order
+        var order = await _unitOfWork.CreateRepositoryAsync<OrderClass, Guid>();
+
+        // Apply the update to the order entity
+        order.Update(paymentIntent);
+
+        // Save changes to the database
+        await _unitOfWork.SaveChangesAsync();
+    }
+
+    /// <summary>
+    ///     Updates the order status to PaymentReceived based on payment intent ID.
+    /// </summary>
+    /// <param name="paymentIntentId">The Stripe payment intent ID.</param>
+    private async Task UpdatePaymentReceived(string paymentIntentId)
+    {
+        // Create repository for Order entity
+        var orderRepo = await _unitOfWork.CreateRepositoryAsync<OrderClass, Guid>();
+
+        // Retrieve order by payment intent specification or throw if not found
+        var paymentIntent = await orderRepo.GetByIdWithSpecificationAsync(new OrderPaymentIntentSpecifications(paymentIntentId)) ?? throw new Exception("Order not found for payment intent.");
+
+        // Update order status to PaymentReceived
+        paymentIntent.Status = OrderStatus.PaymentReceived;
+
+        // Why repeat creating repository?
+        // It's redundant here; you can reuse the same repository instance to update and save.
+        var order = await _unitOfWork.CreateRepositoryAsync<OrderClass, Guid>();
+
+        // Apply the update to the order entity
+        order.Update(paymentIntent);
+
+        // Save changes to the database
+        await _unitOfWork.SaveChangesAsync();
     }
 }

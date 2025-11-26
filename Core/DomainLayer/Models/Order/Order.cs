@@ -41,7 +41,7 @@ public class Order : BaseEntity<Guid>
         DeliveryMethod = deliveryMethod;
         ShipToAddress = shippingAddress;
         PaymentIntentId = paymentIntentId;
-        Status = nameof(OrderStatus.Pending);
+        Status = OrderStatus.Pending;
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class Order : BaseEntity<Guid>
     ///     Current status of the order as a string
     ///     (e.g., "Pending", "PaymentReceived").
     /// </summary>
-    public string Status { get; set; } = null!; // Enum mapped to string // => OrderStatus
+    public OrderStatus Status { get; set; } // Convert enum to string in mapped // => OrderStatus
 
     /// <summary>
     ///     Name of the selected delivery method.

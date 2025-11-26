@@ -18,4 +18,19 @@ public interface IPaymentService
     /// along with payment information such as PaymentIntentId and ClientSecret.
     /// </returns>
     public Task<CustomerBasketDto> CreateOrUpdatePaymentIntentAsync (string basketId);
+
+    /// <summary>
+    ///     Handles and processes data received from Stripe webhooks to update the payment status of an order.
+    /// </summary>
+    /// <param name="request">
+    ///     The raw JSON payload sent by Stripe's webhook containing event details.
+    /// </param>
+    /// <param name="stripeHeader">
+    ///     The Stripe signature header used to verify the authenticity of the webhook request.
+    /// </param>
+    /// <returns>
+    ///     A task representing the asynchronous operation of updating the order payment status.
+    /// </returns>
+    public Task UpdateOrderPaymentStatus (string request, string stripeHeader);
+
 }

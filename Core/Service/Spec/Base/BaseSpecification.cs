@@ -150,7 +150,7 @@ namespace Service.Spec.Base
         /// <param name="pageIndex">The current page index (starting from 1).</param>
         /// <example>
         ///     <code>
-        ///         Total = 100 Products  ==>  100 / 10 = 10 Pages
+        ///         total = 100 Products  ==>  100 / 10 = 10 Pages
         ///
         ///         PageSize = 10, PageIndex = 1
         ///         Take = 10

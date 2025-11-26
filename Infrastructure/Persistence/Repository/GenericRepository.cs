@@ -32,7 +32,7 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext): IGeneri
     }
 
     /// <summary>
-    ///     GetByIdAsync retrieves an entity by its primary key asynchronously.
+    ///     GetByIdWithSpecificationAsync retrieves an entity by its primary key asynchronously.
     /// </summary>
     /// <param name="id">The primary key of the entity to retrieve.</param>
     /// <returns>Returns the entity with the specified id, or null if not found.</returns>
@@ -104,7 +104,7 @@ public class GenericRepository<TEntity, TKey>(StoreDbContext dbContext): IGeneri
     ///     A task representing the asynchronous operation.
     ///     The task result contains the entity that matches the baseSpecification, or <c>null</c> if no entity is found.
     /// </returns>
-    public async Task<TEntity?> GetByIdAsync(IBaseSpecification<TEntity, TKey> specification)
+    public async Task<TEntity?> GetByIdWithSpecificationAsync(IBaseSpecification<TEntity, TKey> specification)
     {
         // Retrieves a single entity matching the baseSpecification criteria,
         // Including any related entities defined in Include expressions.

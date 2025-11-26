@@ -8,17 +8,17 @@ namespace Shared.DTO.Order
         /// <summary>
         ///     Unique identifier of the order.
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid id { get; set; }
 
         /// <summary>
         ///     Email of the customer who placed the order.
         /// </summary>
-        public string BuyerEmail { get; set; } = null!; // => UserEmail
+        public string buyerEmail { get; set; } = null!; // => UserEmail
 
         /// <summary>
         ///     Shipping address associated with this order.
         /// </summary>
-        public ShippingAddressDto ShipToAddress { get; set; } = null!; // => ShippingAddress
+        public ShippingAddressDto shipToAddress { get; set; } = null!; // => ShippingAddress
 
         /// <summary>
         ///     Collection of items included in the order.
@@ -29,12 +29,12 @@ namespace Shared.DTO.Order
         ///     Current status of the order as a string
         ///     (e.g., "Pending", "PaymentReceived").
         /// </summary>
-        public string Status { get; set; } = null!; // Enum mapped to string // => OrderStatus
+        public string status { get; set; } = null!; // Enum mapped to string // => OrderStatus
 
         /// <summary>
         ///     Name of the selected delivery method.
         /// </summary>
-        public string DeliveryMethod { get; set; } = null!;
+        public string deliveryMethod { get; set; } = null!;
 
         /// <summary>
         ///     ID of the delivery method chosen for this order.
@@ -44,17 +44,17 @@ namespace Shared.DTO.Order
         /// <summary>
         ///     Cost of delivery associated with this order.
         /// </summary>
-        public decimal DeliveryCost { get; set; }
+        public decimal deliveryCost { get; set; }
 
         /// <summary>
         ///     Order subtotal before applying delivery cost.
         /// </summary>
-        public decimal SubTotal { get; set; }
+        public decimal subtotal { get; set; }
 
         /// <summary>
         ///     Date and time when the order was placed (with timezone offset).
         /// </summary>
-        public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset orderDate { get; set; } = DateTimeOffset.Now;
 
         /// <summary>
         ///     Stripe payment intent identifier used to track payment status.
@@ -62,8 +62,8 @@ namespace Shared.DTO.Order
         public string PaymentIntentId { get; set; } = null!;
 
         /// <summary>
-        ///     Total cost of the order, including delivery.
+        ///     total cost of the order, including delivery.
         /// </summary>
-        public decimal Total { get; set; }
+        public decimal total { get; set; }
     }
 }

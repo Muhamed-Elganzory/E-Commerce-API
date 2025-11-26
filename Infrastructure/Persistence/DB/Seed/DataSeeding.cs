@@ -173,7 +173,7 @@ public class DataSeeding(StoreDbContext dbContext, UserManager<ApplicationUser> 
             if (deliveryData.Length == 0)
                 throw new Exception("❌ Delivery JSON file is empty.");
 
-            // Deserialize JSON to a list of DeliveryMethod objects
+            // Deserialize JSON to a list of deliveryMethod objects
             var deliverySerialized = await JsonSerializer.DeserializeAsync<List<DeliveryMethod>>(deliveryData);
 
             // Check if deserialization was successful

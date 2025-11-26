@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence.DB.Context;
 
@@ -11,9 +12,11 @@ using Persistence.DB.Context;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(StoreDbContext))]
-    partial class StoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251125150539_ConvertEnum")]
+    partial class ConvertEnum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("DomainLayer.Models.Order.deliveryMethod", b =>
+            modelBuilder.Entity("DomainLayer.Models.Order.DeliveryMethod", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,14 +79,14 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("status")
+                    b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("SubTotal")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("total")
+                    b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -195,7 +198,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("DomainLayer.Models.Order.Order", b =>
                 {
-                    b.HasOne("DomainLayer.Models.Order.deliveryMethod", "deliveryMethod")
+                    b.HasOne("DomainLayer.Models.Order.DeliveryMethod", "DeliveryMethod")
                         .WithMany()
                         .HasForeignKey("DeliveryMethodId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -234,7 +237,7 @@ namespace Persistence.Migrations
                                 .HasForeignKey("OrderId");
                         });
 
-                    b.Navigation("deliveryMethod");
+                    b.Navigation("DeliveryMethod");
 
                     b.Navigation("ShipToAddress")
                         .IsRequired();

@@ -34,7 +34,7 @@ public class CustomerBasketDto
     /// <summary>
     ///     The shipping price for the selected delivery method.
     /// </summary>
-    public decimal? ShippingPrice { get; set; } // DeliveryMethod.Price
+    public decimal? ShippingPrice { get; set; } // deliveryMethod.Price
 
     /// <summary>
     ///     The ID of the selected delivery method.

@@ -84,7 +84,7 @@ namespace Presentation.Controllers.Order
         /// </returns>
         /// <response code="200">Returns all orders for the authenticated user.</response>
         /// <response code="400">Returned if user email claim is missing.</response>
-        [HttpGet("Orders")]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderToReturnDto>>> GetAllOrders()
         {
             var email = GetEmailFromClaimsToken();

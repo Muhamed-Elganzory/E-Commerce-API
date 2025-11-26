@@ -31,13 +31,17 @@ namespace Persistence.DB.Configuration.Order
                 .WithOne()  // Assuming OrderItems has navigation property back to Order, can specify here
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Configure relationship: Order has one DeliveryMethod
+            // Configure relationship: Order has one deliveryMethod
             builder.HasOne(d => d.DeliveryMethod)
-                .WithMany() // Assuming DeliveryMethod can be used by many Orders
+                .WithMany() // Assuming deliveryMethod can be used by many Orders
                 .HasForeignKey(o => o.DeliveryMethodId);
 
             // Configure owned type: ShippingAddress is owned by Order
             builder.OwnsOne(o => o.ShipToAddress);
+
+            // Convert the enum staus order to string
+            builder.Property(s => s.Status)
+                .HasConversion<string>();
         }
     }
 }

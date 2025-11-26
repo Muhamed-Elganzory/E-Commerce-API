@@ -47,7 +47,7 @@ namespace serviceAbstraction.Contracts.Service
         ///     Provides access to order management operations.
         ///     <para>
         ///         Handles order creation, retrieval, and persistence logic.
-        ///         Manages related entities such as <c>OrderItems</c>, <c>DeliveryMethod</c>,
+        ///         Manages related entities such as <c>OrderItems</c>, <c>deliveryMethod</c>,
         ///         and <c>ShippingAddress</c>, ensuring consistency across the ordering process.
         ///     </para>
         /// </summary>

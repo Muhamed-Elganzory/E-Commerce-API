@@ -137,7 +137,7 @@ namespace Service.Order
         /// </returns>
         public async Task<IEnumerable<OrderToReturnDto>> GetAllOrderAsync(string email)
         {
-            // Use specification to load navigation property ( ShippingAddress - OrderItems - DeliveryMethod ) and sort data
+            // Use specification to load navigation property ( ShippingAddress - OrderItems - deliveryMethod ) and sort data
             var spec = new OrderSpecification(email);
             var ordersRepo = await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Order.Order, Guid>();
             var orders = await ordersRepo.GetAllAsync(spec);
@@ -155,10 +155,10 @@ namespace Service.Order
         /// </returns>
         public async Task<OrderToReturnDto> GetOrderByIdAsync(Guid orderId)
         {
-            // Use specification to load navigation property ( ShippingAddress - OrderItems - DeliveryMethod )
+            // Use specification to load navigation property ( ShippingAddress - OrderItems - deliveryMethod )
             var spec = new OrderSpecification(orderId);
             var orderRepo = await _unitOfWork.CreateRepositoryAsync<DomainLayer.Models.Order.Order, Guid>();
-            var order = await orderRepo.GetByIdAsync(spec);
+            var order = await orderRepo.GetByIdWithSpecificationAsync(spec);
 
             return _mapper.Map<OrderToReturnDto>(order);
         }

@@ -42,7 +42,7 @@ namespace Persistence.Migrations
             migrationBuilder.RenameColumn(
                 name: "UserEmail",
                 table: "Orders",
-                newName: "Status");
+                newName: "status");
 
             migrationBuilder.AlterColumn<decimal>(
                 name: "SubTotal",
@@ -74,7 +74,7 @@ namespace Persistence.Migrations
                 defaultValue: "");
 
             migrationBuilder.AddColumn<decimal>(
-                name: "Total",
+                name: "total",
                 table: "Orders",
                 type: "decimal(18,2)",
                 nullable: false,
@@ -113,7 +113,7 @@ namespace Persistence.Migrations
                 table: "Orders");
 
             migrationBuilder.DropColumn(
-                name: "Total",
+                name: "total",
                 table: "Orders");
 
             migrationBuilder.RenameColumn(
@@ -142,7 +142,7 @@ namespace Persistence.Migrations
                 newName: "ShippingAddress_City");
 
             migrationBuilder.RenameColumn(
-                name: "Status",
+                name: "status",
                 table: "Orders",
                 newName: "UserEmail");
 

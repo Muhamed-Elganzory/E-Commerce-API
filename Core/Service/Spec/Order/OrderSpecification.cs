@@ -15,7 +15,7 @@ namespace Service.Spec.Order
         /// </summary>
         /// <param name="email">User email to filter orders.</param>
         /// <remarks>
-        ///     Includes related entities: OrderItems, DeliveryMethod, ShippingAddress.
+        ///     Includes related entities: OrderItems, deliveryMethod, ShippingAddress.
         ///     Orders results by OrderDate descending (most recent orders first).
         /// </remarks>
         public OrderSpecification(string email) : base(e => e.BuyerEmail == email)
@@ -38,7 +38,7 @@ namespace Service.Spec.Order
         /// </summary>
         /// <param name="orderId">Unique identifier of the order.</param>
         /// <remarks>
-        ///     Includes related entities: OrderItems, DeliveryMethod, ShippingAddress.
+        ///     Includes related entities: OrderItems, deliveryMethod, ShippingAddress.
         ///     No sorting needed as this targets a single order.
         /// </remarks>
         public OrderSpecification(Guid orderId) : base(o => o.Id == orderId)

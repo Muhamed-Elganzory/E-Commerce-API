@@ -79,12 +79,12 @@ public class MappingProfiles : Profile
         CreateMap<ShippingAddressDto, ShippingAddress>().ReverseMap();
 
         // Maps from domain Order entity to OrderToReturnDto used in API responses.
-        // Maps the DeliveryMethod property to the DeliveryMethod's ShortName string,
+        // Maps the deliveryMethod property to the deliveryMethod's ShortName string,
         // so that API consumers get a simple delivery method name instead of the full object.
         CreateMap<DomainLayer.Models.Order.Order, OrderToReturnDto>()
-            .ForMember(dist => dist.DeliveryMethod,
+            .ForMember(dist => dist.deliveryMethod,
                 opt => opt.MapFrom(src => src.DeliveryMethod.ShortName))
-            .ForMember(dist => dist.Total,// SubTotal + src.DeliveryCost
+            .ForMember(dist => dist.total,// SubTotal + src.DeliveryCost
                 opt => opt.MapFrom(src => src.GetTotal()));
 
         // Maps from domain OrderItems entity to OrderItemsDto used in API responses.
@@ -106,7 +106,7 @@ public class MappingProfiles : Profile
 
         #region Delivery Method
 
-        // Map DeliveryMethod entity to DeliveryMethodDto for data transfer
+        // Map deliveryMethod entity to DeliveryMethodDto for data transfer
         CreateMap<DeliveryMethod, DeliveryMethodDto>();
 
         #endregion

@@ -117,7 +117,7 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
         return new PaginatedResult<ProductDto>(
             productsCount,     // ✅ Page size (items per page)
             queryParams.PageNumber,     // ✅ Current page index
-            totalCount,                // ✅ Total number of items
+            totalCount,                // ✅ total number of items
             productsData               // ✅ The current page data
         );
     }
@@ -148,7 +148,7 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
         // which might cause additional database queries later (lazy loading).
         //
         // Example:
-        // var product = await repo.GetByIdAsync(id);
+        // var product = await repo.GetByIdWithSpecificationAsync(id);
         // ─────────────────────────────────────────────
 
         // ─────────────────────────────────────────────
@@ -160,7 +160,7 @@ public class ProductService(IUnitOfWork unitOfWork, IMapper mapper) : IProductSe
         var specification = new ProductWithBrandAndTypeBaseSpecifications(id);
 
         // 3️⃣ Use the baseSpecification to retrieve the product that matches the criteria.
-        var product = await repo.GetByIdAsync(specification);
+        var product = await repo.GetByIdWithSpecificationAsync(specification);
         // ─────────────────────────────────────────────
 
         if (product == null)
